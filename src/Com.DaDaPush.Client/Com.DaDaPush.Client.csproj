@@ -12,7 +12,7 @@ Contact: contacts@dadapush.com
     
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6E7ECF9D-690A-4452-B6D7-F88BF9F1725B}</ProjectGuid>
+    <ProjectGuid>{18F8298F-1E27-40C6-B8FA-4AE4DBB11EEC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Com.DaDaPush.Client</RootNamespace>

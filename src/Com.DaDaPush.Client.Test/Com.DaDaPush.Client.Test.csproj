@@ -81,7 +81,7 @@ Contact: contacts@dadapush.com
   <Import Project="$(MsBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
       <ProjectReference Include="..\Com.DaDaPush.Client\Com.DaDaPush.Client.csproj">
-          <Project>{6E7ECF9D-690A-4452-B6D7-F88BF9F1725B}</Project>
+          <Project>{18F8298F-1E27-40C6-B8FA-4AE4DBB11EEC}</Project>
           <Name>Com.DaDaPush.Client</Name>
       </ProjectReference>
   </ItemGroup>
