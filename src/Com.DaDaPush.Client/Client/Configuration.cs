@@ -9,30 +9,27 @@
  */
 
 using System;
-using System.Reflection;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Com.DaDaPush.Client.Client
 {
     /// <summary>
-    /// Represents a set of configuration settings
+    ///     Represents a set of configuration settings
     /// </summary>
     public class Configuration : IReadableConfiguration
     {
         #region Constants
 
         /// <summary>
-        /// Version of the package.
+        ///     Version of the package.
         /// </summary>
         /// <value>Version of the package.</value>
         public const string Version = "1.0.0";
 
         /// <summary>
-        /// Identifier for ISO 8601 DateTime Format
+        ///     Identifier for ISO 8601 DateTime Format
         /// </summary>
         /// <remarks>See https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx#Anchor_8 for more information.</remarks>
         // ReSharper disable once InconsistentNaming
@@ -46,32 +43,28 @@ namespace Com.DaDaPush.Client.Client
         private static Configuration _globalConfiguration;
 
         /// <summary>
-        /// Default creation of exceptions for a given method name and response object
+        ///     Default creation of exceptions for a given method name and response object
         /// </summary>
         public static readonly ExceptionFactory DefaultExceptionFactory = (methodName, response) =>
         {
-            var status = (int)response.StatusCode;
+            var status = (int) response.StatusCode;
             if (status >= 400)
-            {
                 return new ApiException(status,
                     string.Format("Error calling {0}: {1}", methodName, response.Content),
                     response.Content);
-            }
             if (status == 0)
-            {
                 return new ApiException(status,
                     string.Format("Error calling {0}: {1}", methodName, response.ErrorMessage), response.ErrorMessage);
-            }
             return null;
         };
 
         /// <summary>
-        /// Gets or sets the default Configuration.
+        ///     Gets or sets the default Configuration.
         /// </summary>
         /// <value>Configuration.</value>
         public static Configuration Default
         {
-            get { return _globalConfiguration; }
+            get => _globalConfiguration;
             set
             {
                 lock (GlobalConfigSync)
@@ -86,16 +79,16 @@ namespace Com.DaDaPush.Client.Client
         #region Private Members
 
         /// <summary>
-        /// Gets or sets the API key based on the authentication name.
+        ///     Gets or sets the API key based on the authentication name.
         /// </summary>
         /// <value>The API key.</value>
-        private IDictionary<string, string> _apiKey = null;
+        private IDictionary<string, string> _apiKey;
 
         /// <summary>
-        /// Gets or sets the prefix (e.g. Token) of the API key based on the authentication name.
+        ///     Gets or sets the prefix (e.g. Token) of the API key based on the authentication name.
         /// </summary>
         /// <value>The prefix of the API key.</value>
-        private IDictionary<string, string> _apiKeyPrefix = null;
+        private IDictionary<string, string> _apiKeyPrefix;
 
         private string _dateTimeFormat = ISO8601_DATETIME_FORMAT;
         private string _tempFolderPath = Path.GetTempPath();
@@ -110,7 +103,7 @@ namespace Com.DaDaPush.Client.Client
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Configuration" /> class
+        ///     Initializes a new instance of the <see cref="Configuration" /> class
         /// </summary>
         public Configuration()
         {
@@ -125,7 +118,7 @@ namespace Com.DaDaPush.Client.Client
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Configuration" /> class
+        ///     Initializes a new instance of the <see cref="Configuration" /> class
         /// </summary>
         public Configuration(
             IDictionary<string, string> defaultHeader,
@@ -144,24 +137,15 @@ namespace Com.DaDaPush.Client.Client
 
             BasePath = basePath;
 
-            foreach (var keyValuePair in defaultHeader)
-            {
-                DefaultHeader.Add(keyValuePair);
-            }
+            foreach (var keyValuePair in defaultHeader) DefaultHeader.Add(keyValuePair);
 
-            foreach (var keyValuePair in apiKey)
-            {
-                ApiKey.Add(keyValuePair);
-            }
+            foreach (var keyValuePair in apiKey) ApiKey.Add(keyValuePair);
 
-            foreach (var keyValuePair in apiKeyPrefix)
-            {
-                ApiKeyPrefix.Add(keyValuePair);
-            }
+            foreach (var keyValuePair in apiKeyPrefix) ApiKeyPrefix.Add(keyValuePair);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Configuration" /> class with different settings
+        ///     Initializes a new instance of the <see cref="Configuration" /> class with different settings
         /// </summary>
         /// <param name="apiClient">Api client</param>
         /// <param name="defaultHeader">Dictionary of default HTTP header</param>
@@ -189,20 +173,18 @@ namespace Com.DaDaPush.Client.Client
             int timeout = 100000,
             string userAgent = "OpenAPI-Generator/1.0.0/csharp"
             // ReSharper restore UnusedParameter.Local
-            )
+        )
         {
-
         }
 
         /// <summary>
-        /// Initializes a new instance of the Configuration class.
+        ///     Initializes a new instance of the Configuration class.
         /// </summary>
         /// <param name="apiClient">Api client.</param>
         [Obsolete("This constructor caused unexpected sharing of static data. It is no longer supported.", true)]
         // ReSharper disable once UnusedParameter.Local
         public Configuration(ApiClient apiClient)
         {
-
         }
 
         #endregion Constructors
@@ -210,96 +192,87 @@ namespace Com.DaDaPush.Client.Client
 
         #region Properties
 
-        private ApiClient _apiClient = null;
-        /// <summary>
-        /// Gets an instance of an ApiClient for this configuration
-        /// </summary>
-        public virtual ApiClient ApiClient
-        {
-            get
-            {
-                if (_apiClient == null) _apiClient = CreateApiClient();
-                return _apiClient;
-            }
-        }
+        private ApiClient _apiClient;
 
-        private String _basePath = null;
         /// <summary>
-        /// Gets or sets the base path for API access.
+        ///     Gets an instance of an ApiClient for this configuration
         /// </summary>
-        public virtual string BasePath {
-            get { return _basePath; }
-            set {
+        public virtual ApiClient ApiClient => _apiClient ?? (_apiClient = CreateApiClient());
+
+        private string _basePath;
+
+        /// <summary>
+        ///     Gets or sets the base path for API access.
+        /// </summary>
+        public virtual string BasePath
+        {
+            get => _basePath;
+            set
+            {
                 _basePath = value;
                 // pass-through to ApiClient if it's set.
-                if(_apiClient != null) {
-                    _apiClient.RestClient.BaseUrl = new Uri(_basePath);
-                }
+                if (_apiClient != null) _apiClient.RestClient.BaseUrl = new Uri(_basePath);
             }
         }
 
         /// <summary>
-        /// Gets or sets the default header.
+        ///     Gets or sets the default header.
         /// </summary>
         public virtual IDictionary<string, string> DefaultHeader { get; set; }
 
         /// <summary>
-        /// Gets or sets the HTTP timeout (milliseconds) of ApiClient. Default to 100000 milliseconds.
+        ///     Gets or sets the HTTP timeout (milliseconds) of ApiClient. Default to 100000 milliseconds.
         /// </summary>
         public virtual int Timeout
         {
-            
-            get { return ApiClient.RestClient.Timeout; }
-            set { ApiClient.RestClient.Timeout = value; }
+            get => ApiClient.RestClient.Timeout;
+            set => ApiClient.RestClient.Timeout = value;
         }
 
         /// <summary>
-        /// Gets or sets the HTTP user agent.
+        ///     Gets or sets the HTTP user agent.
         /// </summary>
         /// <value>Http user agent.</value>
         public virtual string UserAgent { get; set; }
 
         /// <summary>
-        /// Gets or sets the username (HTTP basic authentication).
+        ///     Gets or sets the username (HTTP basic authentication).
         /// </summary>
         /// <value>The username.</value>
         public virtual string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the password (HTTP basic authentication).
+        ///     Gets or sets the password (HTTP basic authentication).
         /// </summary>
         /// <value>The password.</value>
         public virtual string Password { get; set; }
 
         /// <summary>
-        /// Gets the API key with prefix.
+        ///     Gets the API key with prefix.
         /// </summary>
         /// <param name="apiKeyIdentifier">API key identifier (authentication scheme).</param>
         /// <returns>API key with prefix.</returns>
         public string GetApiKeyWithPrefix(string apiKeyIdentifier)
         {
-            var apiKeyValue = "";
-            ApiKey.TryGetValue (apiKeyIdentifier, out apiKeyValue);
-            var apiKeyPrefix = "";
-            if (ApiKeyPrefix.TryGetValue (apiKeyIdentifier, out apiKeyPrefix))
+            ApiKey.TryGetValue(apiKeyIdentifier, out var apiKeyValue);
+            if (ApiKeyPrefix.TryGetValue(apiKeyIdentifier, out var apiKeyPrefix))
                 return apiKeyPrefix + " " + apiKeyValue;
-            else
-                return apiKeyValue;
+            return apiKeyValue;
         }
 
         /// <summary>
-        /// Gets or sets the access token for OAuth2 authentication.
+        ///     Gets or sets the access token for OAuth2 authentication.
         /// </summary>
         /// <value>The access token.</value>
         public virtual string AccessToken { get; set; }
 
         /// <summary>
-        /// Gets or sets the temporary folder path to store the files downloaded from the server.
+        ///     Gets or sets the temporary folder path to store the files downloaded from the server.
         /// </summary>
         /// <value>Folder path.</value>
         public virtual string TempFolderPath
         {
-            get { return _tempFolderPath; }
+            get => _tempFolderPath;
 
             set
             {
@@ -310,34 +283,27 @@ namespace Com.DaDaPush.Client.Client
                 }
 
                 // create the directory if it does not exist
-                if (!Directory.Exists(value))
-                {
-                    Directory.CreateDirectory(value);
-                }
+                if (!Directory.Exists(value)) Directory.CreateDirectory(value);
 
                 // check if the path contains directory separator at the end
                 if (value[value.Length - 1] == Path.DirectorySeparatorChar)
-                {
                     _tempFolderPath = value;
-                }
                 else
-                {
                     _tempFolderPath = value + Path.DirectorySeparatorChar;
-                }
             }
         }
 
         /// <summary>
-        /// Gets or sets the date time format used when serializing in the ApiClient
-        /// By default, it's set to ISO 8601 - "o", for others see:
-        /// https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx
-        /// and https://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx
-        /// No validation is done to ensure that the string you're providing is valid
+        ///     Gets or sets the date time format used when serializing in the ApiClient
+        ///     By default, it's set to ISO 8601 - "o", for others see:
+        ///     https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx
+        ///     and https://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx
+        ///     No validation is done to ensure that the string you're providing is valid
         /// </summary>
         /// <value>The DateTimeFormat string</value>
         public virtual string DateTimeFormat
         {
-            get { return _dateTimeFormat; }
+            get => _dateTimeFormat;
             set
             {
                 if (string.IsNullOrEmpty(value))
@@ -354,37 +320,24 @@ namespace Com.DaDaPush.Client.Client
         }
 
         /// <summary>
-        /// Gets or sets the prefix (e.g. Token) of the API key based on the authentication name.
+        ///     Gets or sets the prefix (e.g. Token) of the API key based on the authentication name.
         /// </summary>
         /// <value>The prefix of the API key.</value>
         public virtual IDictionary<string, string> ApiKeyPrefix
         {
-            get { return _apiKeyPrefix; }
-            set
-            {
-                if (value == null)
-                {
-                    throw new InvalidOperationException("ApiKeyPrefix collection may not be null.");
-                }
-                _apiKeyPrefix = value;
-            }
+            get => _apiKeyPrefix;
+            set => _apiKeyPrefix =
+                value ?? throw new InvalidOperationException("ApiKeyPrefix collection may not be null.");
         }
 
         /// <summary>
-        /// Gets or sets the API key based on the authentication name.
+        ///     Gets or sets the API key based on the authentication name.
         /// </summary>
         /// <value>The API key.</value>
         public virtual IDictionary<string, string> ApiKey
         {
-            get { return _apiKey; }
-            set
-            {
-                if (value == null)
-                {
-                    throw new InvalidOperationException("ApiKey collection may not be null.");
-                }
-                _apiKey = value;
-            }
+            get => _apiKey;
+            set => _apiKey = value ?? throw new InvalidOperationException("ApiKey collection may not be null.");
         }
 
         #endregion Properties
@@ -392,7 +345,7 @@ namespace Com.DaDaPush.Client.Client
         #region Methods
 
         /// <summary>
-        /// Add default header.
+        ///     Add default header.
         /// </summary>
         /// <param name="key">Header field name.</param>
         /// <param name="value">Header field value.</param>
@@ -403,23 +356,23 @@ namespace Com.DaDaPush.Client.Client
         }
 
         /// <summary>
-        /// Creates a new <see cref="ApiClient" /> based on this <see cref="Configuration" /> instance.
+        ///     Creates a new <see cref="ApiClient" /> based on this <see cref="Configuration" /> instance.
         /// </summary>
         /// <returns></returns>
         public ApiClient CreateApiClient()
         {
-            return new ApiClient(BasePath) { Configuration = this };
+            return new ApiClient(BasePath) {Configuration = this};
         }
 
 
         /// <summary>
-        /// Returns a string with essential information for debugging.
+        ///     Returns a string with essential information for debugging.
         /// </summary>
-        public static String ToDebugReport()
+        public static string ToDebugReport()
         {
-            String report = "C# SDK (Com.DaDaPush.Client) Debug Report:\n";
-            report += "    OS: " + System.Environment.OSVersion + "\n";
-            report += "    .NET Framework Version: " + System.Environment.Version  + "\n";
+            var report = "C# SDK (Com.DaDaPush.Client) Debug Report:\n";
+            report += "    OS: " + Environment.OSVersion + "\n";
+            report += "    .NET Framework Version: " + Environment.Version + "\n";
             report += "    Version of the API: v1\n";
             report += "    SDK Package Version: 1.0.0\n";
 
@@ -427,7 +380,7 @@ namespace Com.DaDaPush.Client.Client
         }
 
         /// <summary>
-        /// Add Api Key Header.
+        ///     Add Api Key Header.
         /// </summary>
         /// <param name="key">Api Key name.</param>
         /// <param name="value">Api Key value.</param>
@@ -438,7 +391,7 @@ namespace Com.DaDaPush.Client.Client
         }
 
         /// <summary>
-        /// Sets the API key prefix.
+        ///     Sets the API key prefix.
         /// </summary>
         /// <param name="key">Api Key name.</param>
         /// <param name="value">Api Key value.</param>

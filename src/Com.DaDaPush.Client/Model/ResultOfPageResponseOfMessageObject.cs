@@ -9,83 +9,110 @@
  */
 
 using System;
-using System.Linq;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = Com.DaDaPush.Client.Client.OpenAPIDateConverter;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Com.DaDaPush.Client.Model
 {
     /// <summary>
-    /// ResultOfPageResponseOfMessageObject
+    ///     ResultOfPageResponseOfMessageObject
     /// </summary>
     [DataContract]
-    public partial class ResultOfPageResponseOfMessageObject :  IEquatable<ResultOfPageResponseOfMessageObject>, IValidatableObject
+    public class ResultOfPageResponseOfMessageObject : IEquatable<ResultOfPageResponseOfMessageObject>,
+        IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResultOfPageResponseOfMessageObject" /> class.
+        ///     Initializes a new instance of the <see cref="ResultOfPageResponseOfMessageObject" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected ResultOfPageResponseOfMessageObject() { }
+        protected ResultOfPageResponseOfMessageObject()
+        {
+        }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResultOfPageResponseOfMessageObject" /> class.
+        ///     Initializes a new instance of the <see cref="ResultOfPageResponseOfMessageObject" /> class.
         /// </summary>
         /// <param name="code">code (required).</param>
         /// <param name="data">data.</param>
         /// <param name="errmsg">errmsg (required).</param>
-        public ResultOfPageResponseOfMessageObject(int? code = default(int?), PageResponseOfMessageObject data = default(PageResponseOfMessageObject), string errmsg = default(string))
+        public ResultOfPageResponseOfMessageObject(int? code = default(int?),
+            PageResponseOfMessageObject data = default(PageResponseOfMessageObject), string errmsg = default(string))
         {
             // to ensure "code" is required (not null)
             if (code == null)
-            {
-                throw new InvalidDataException("code is a required property for ResultOfPageResponseOfMessageObject and cannot be null");
-            }
-            else
-            {
-                this.Code = code;
-            }
-            
+                throw new InvalidDataException(
+                    "code is a required property for ResultOfPageResponseOfMessageObject and cannot be null");
+            Code = code;
+
             // to ensure "errmsg" is required (not null)
-            if (errmsg == null)
-            {
-                throw new InvalidDataException("errmsg is a required property for ResultOfPageResponseOfMessageObject and cannot be null");
-            }
-            else
-            {
-                this.Errmsg = errmsg;
-            }
-            
-            this.Data = data;
+            Errmsg = errmsg ?? throw new InvalidDataException(
+                         "errmsg is a required property for ResultOfPageResponseOfMessageObject and cannot be null");
+
+            Data = data;
         }
-        
+
         /// <summary>
-        /// Gets or Sets Code
+        ///     Gets or Sets Code
         /// </summary>
-        [DataMember(Name="code", EmitDefaultValue=false)]
+        [DataMember(Name = "code", EmitDefaultValue = false)]
         public int? Code { get; set; }
 
         /// <summary>
-        /// Gets or Sets Data
+        ///     Gets or Sets Data
         /// </summary>
-        [DataMember(Name="data", EmitDefaultValue=false)]
+        [DataMember(Name = "data", EmitDefaultValue = false)]
         public PageResponseOfMessageObject Data { get; set; }
 
         /// <summary>
-        /// Gets or Sets Errmsg
+        ///     Gets or Sets Errmsg
         /// </summary>
-        [DataMember(Name="errmsg", EmitDefaultValue=false)]
+        [DataMember(Name = "errmsg", EmitDefaultValue = false)]
         public string Errmsg { get; set; }
 
         /// <summary>
-        /// Returns the string presentation of the object
+        ///     Returns true if ResultOfPageResponseOfMessageObject instances are equal
+        /// </summary>
+        /// <param name="input">Instance of ResultOfPageResponseOfMessageObject to be compared</param>
+        /// <returns>Boolean</returns>
+        public bool Equals(ResultOfPageResponseOfMessageObject input)
+        {
+            if (input == null)
+                return false;
+
+            return
+                (
+                    Code == input.Code ||
+                    Code != null &&
+                    Code.Equals(input.Code)
+                ) &&
+                (
+                    Data == input.Data ||
+                    Data != null &&
+                    Data.Equals(input.Data)
+                ) &&
+                (
+                    Errmsg == input.Errmsg ||
+                    Errmsg != null &&
+                    Errmsg.Equals(input.Errmsg)
+                );
+        }
+
+        /// <summary>
+        ///     To validate all properties of the instance
+        /// </summary>
+        /// <param name="validationContext">Validation context</param>
+        /// <returns>Validation Result</returns>
+        IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
+        {
+            yield break;
+        }
+
+        /// <summary>
+        ///     Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
         public override string ToString()
@@ -98,9 +125,9 @@ namespace Com.DaDaPush.Client.Model
             sb.Append("}\n");
             return sb.ToString();
         }
-  
+
         /// <summary>
-        /// Returns the JSON string presentation of the object
+        ///     Returns the JSON string presentation of the object
         /// </summary>
         /// <returns>JSON string presentation of the object</returns>
         public virtual string ToJson()
@@ -109,71 +136,32 @@ namespace Com.DaDaPush.Client.Model
         }
 
         /// <summary>
-        /// Returns true if objects are equal
+        ///     Returns true if objects are equal
         /// </summary>
         /// <param name="input">Object to be compared</param>
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as ResultOfPageResponseOfMessageObject);
+            return Equals(input as ResultOfPageResponseOfMessageObject);
         }
 
         /// <summary>
-        /// Returns true if ResultOfPageResponseOfMessageObject instances are equal
-        /// </summary>
-        /// <param name="input">Instance of ResultOfPageResponseOfMessageObject to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(ResultOfPageResponseOfMessageObject input)
-        {
-            if (input == null)
-                return false;
-
-            return 
-                (
-                    this.Code == input.Code ||
-                    (this.Code != null &&
-                    this.Code.Equals(input.Code))
-                ) && 
-                (
-                    this.Data == input.Data ||
-                    (this.Data != null &&
-                    this.Data.Equals(input.Data))
-                ) && 
-                (
-                    this.Errmsg == input.Errmsg ||
-                    (this.Errmsg != null &&
-                    this.Errmsg.Equals(input.Errmsg))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
+        ///     Gets the hash code
         /// </summary>
         /// <returns>Hash code</returns>
         public override int GetHashCode()
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
-                if (this.Code != null)
-                    hashCode = hashCode * 59 + this.Code.GetHashCode();
-                if (this.Data != null)
-                    hashCode = hashCode * 59 + this.Data.GetHashCode();
-                if (this.Errmsg != null)
-                    hashCode = hashCode * 59 + this.Errmsg.GetHashCode();
+                var hashCode = 41;
+                if (Code != null)
+                    hashCode = hashCode * 59 + Code.GetHashCode();
+                if (Data != null)
+                    hashCode = hashCode * 59 + Data.GetHashCode();
+                if (Errmsg != null)
+                    hashCode = hashCode * 59 + Errmsg.GetHashCode();
                 return hashCode;
             }
         }
-
-        /// <summary>
-        /// To validate all properties of the instance
-        /// </summary>
-        /// <param name="validationContext">Validation context</param>
-        /// <returns>Validation Result</returns>
-        IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
-        {
-            yield break;
-        }
     }
-
 }

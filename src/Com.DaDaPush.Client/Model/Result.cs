@@ -9,83 +9,107 @@
  */
 
 using System;
-using System.Linq;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = Com.DaDaPush.Client.Client.OpenAPIDateConverter;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Com.DaDaPush.Client.Model
 {
     /// <summary>
-    /// Result
+    ///     Result
     /// </summary>
     [DataContract]
-    public partial class Result :  IEquatable<Result>, IValidatableObject
+    public class Result : IEquatable<Result>, IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Result" /> class.
+        ///     Initializes a new instance of the <see cref="Result" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected Result() { }
+        protected Result()
+        {
+        }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Result" /> class.
+        ///     Initializes a new instance of the <see cref="Result" /> class.
         /// </summary>
         /// <param name="code">code (required).</param>
         /// <param name="data">data.</param>
         /// <param name="errmsg">errmsg (required).</param>
-        public Result(int? code = default(int?), Object data = default(Object), string errmsg = default(string))
+        public Result(int? code = default(int?), object data = default(object), string errmsg = default(string))
         {
             // to ensure "code" is required (not null)
             if (code == null)
-            {
                 throw new InvalidDataException("code is a required property for Result and cannot be null");
-            }
-            else
-            {
-                this.Code = code;
-            }
-            
+            Code = code;
+
             // to ensure "errmsg" is required (not null)
-            if (errmsg == null)
-            {
-                throw new InvalidDataException("errmsg is a required property for Result and cannot be null");
-            }
-            else
-            {
-                this.Errmsg = errmsg;
-            }
-            
-            this.Data = data;
+            Errmsg = errmsg ?? throw new InvalidDataException(
+                         "errmsg is a required property for Result and cannot be null");
+
+            Data = data;
         }
-        
+
         /// <summary>
-        /// Gets or Sets Code
+        ///     Gets or Sets Code
         /// </summary>
-        [DataMember(Name="code", EmitDefaultValue=false)]
+        [DataMember(Name = "code", EmitDefaultValue = false)]
         public int? Code { get; set; }
 
         /// <summary>
-        /// Gets or Sets Data
+        ///     Gets or Sets Data
         /// </summary>
-        [DataMember(Name="data", EmitDefaultValue=false)]
-        public Object Data { get; set; }
+        [DataMember(Name = "data", EmitDefaultValue = false)]
+        public object Data { get; set; }
 
         /// <summary>
-        /// Gets or Sets Errmsg
+        ///     Gets or Sets Errmsg
         /// </summary>
-        [DataMember(Name="errmsg", EmitDefaultValue=false)]
+        [DataMember(Name = "errmsg", EmitDefaultValue = false)]
         public string Errmsg { get; set; }
 
         /// <summary>
-        /// Returns the string presentation of the object
+        ///     Returns true if Result instances are equal
+        /// </summary>
+        /// <param name="input">Instance of Result to be compared</param>
+        /// <returns>Boolean</returns>
+        public bool Equals(Result input)
+        {
+            if (input == null)
+                return false;
+
+            return
+                (
+                    Code == input.Code ||
+                    Code != null &&
+                    Code.Equals(input.Code)
+                ) &&
+                (
+                    Data == input.Data ||
+                    Data != null &&
+                    Data.Equals(input.Data)
+                ) &&
+                (
+                    Errmsg == input.Errmsg ||
+                    Errmsg != null &&
+                    Errmsg.Equals(input.Errmsg)
+                );
+        }
+
+        /// <summary>
+        ///     To validate all properties of the instance
+        /// </summary>
+        /// <param name="validationContext">Validation context</param>
+        /// <returns>Validation Result</returns>
+        IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
+        {
+            yield break;
+        }
+
+        /// <summary>
+        ///     Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
         public override string ToString()
@@ -98,9 +122,9 @@ namespace Com.DaDaPush.Client.Model
             sb.Append("}\n");
             return sb.ToString();
         }
-  
+
         /// <summary>
-        /// Returns the JSON string presentation of the object
+        ///     Returns the JSON string presentation of the object
         /// </summary>
         /// <returns>JSON string presentation of the object</returns>
         public virtual string ToJson()
@@ -109,71 +133,32 @@ namespace Com.DaDaPush.Client.Model
         }
 
         /// <summary>
-        /// Returns true if objects are equal
+        ///     Returns true if objects are equal
         /// </summary>
         /// <param name="input">Object to be compared</param>
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as Result);
+            return Equals(input as Result);
         }
 
         /// <summary>
-        /// Returns true if Result instances are equal
-        /// </summary>
-        /// <param name="input">Instance of Result to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(Result input)
-        {
-            if (input == null)
-                return false;
-
-            return 
-                (
-                    this.Code == input.Code ||
-                    (this.Code != null &&
-                    this.Code.Equals(input.Code))
-                ) && 
-                (
-                    this.Data == input.Data ||
-                    (this.Data != null &&
-                    this.Data.Equals(input.Data))
-                ) && 
-                (
-                    this.Errmsg == input.Errmsg ||
-                    (this.Errmsg != null &&
-                    this.Errmsg.Equals(input.Errmsg))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
+        ///     Gets the hash code
         /// </summary>
         /// <returns>Hash code</returns>
         public override int GetHashCode()
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
-                if (this.Code != null)
-                    hashCode = hashCode * 59 + this.Code.GetHashCode();
-                if (this.Data != null)
-                    hashCode = hashCode * 59 + this.Data.GetHashCode();
-                if (this.Errmsg != null)
-                    hashCode = hashCode * 59 + this.Errmsg.GetHashCode();
+                var hashCode = 41;
+                if (Code != null)
+                    hashCode = hashCode * 59 + Code.GetHashCode();
+                if (Data != null)
+                    hashCode = hashCode * 59 + Data.GetHashCode();
+                if (Errmsg != null)
+                    hashCode = hashCode * 59 + Errmsg.GetHashCode();
                 return hashCode;
             }
         }
-
-        /// <summary>
-        /// To validate all properties of the instance
-        /// </summary>
-        /// <param name="validationContext">Validation context</param>
-        /// <returns>Validation Result</returns>
-        IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
-        {
-            yield break;
-        }
     }
-
 }

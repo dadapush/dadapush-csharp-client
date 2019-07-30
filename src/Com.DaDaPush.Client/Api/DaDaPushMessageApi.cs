@@ -12,309 +12,1247 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using RestSharp;
+using System.Threading.Tasks;
 using Com.DaDaPush.Client.Client;
 using Com.DaDaPush.Client.Model;
+using RestSharp;
 
 namespace Com.DaDaPush.Client.Api
 {
     /// <summary>
-    /// Represents a collection of functions to interact with the API endpoints
+    ///     Represents a collection of functions to interact with the API endpoints
     /// </summary>
     public interface IDaDaPushMessageApi : IApiAccessor
     {
         #region Synchronous Operations
+
         /// <summary>
-        /// push Message to a Channel
+        ///     push Message to a Channel
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li
+        ///     &gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body">body</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>ResultOfMessagePushResponse</returns>
-        ResultOfMessagePushResponse CreateMessage (MessagePushRequest body, string xChannelToken = null);
+        ResultOfMessagePushResponse CreateMessage(MessagePushRequest body, string channelToken = null);
 
         /// <summary>
-        /// push Message to a Channel
+        ///     push Message to a Channel
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li
+        ///     &gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body">body</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>ApiResponse of ResultOfMessagePushResponse</returns>
-        ApiResponse<ResultOfMessagePushResponse> CreateMessageWithHttpInfo (MessagePushRequest body, string xChannelToken = null);
+        ApiResponse<ResultOfMessagePushResponse> CreateMessageWithHttpInfo(MessagePushRequest body,
+            string channelToken = null);
+
         /// <summary>
-        /// delete a Channel Message
+        ///     delete a Channel Message
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;
+        ///     li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>Result</returns>
-        Result DeleteMessage (long? messageId, string xChannelToken = null);
+        Result DeleteMessage(long? messageId, string channelToken = null);
 
         /// <summary>
-        /// delete a Channel Message
+        ///     delete a Channel Message
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;
+        ///     li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>ApiResponse of Result</returns>
-        ApiResponse<Result> DeleteMessageWithHttpInfo (long? messageId, string xChannelToken = null);
+        ApiResponse<Result> DeleteMessageWithHttpInfo(long? messageId, string channelToken = null);
+
         /// <summary>
-        /// get a Channel Message
+        ///     get a Channel Message
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;
+        ///     li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>ResultOfMessageObject</returns>
-        ResultOfMessageObject GetMessage (long? messageId, string xChannelToken = null);
+        ResultOfMessageObject GetMessage(long? messageId, string channelToken = null);
 
         /// <summary>
-        /// get a Channel Message
+        ///     get a Channel Message
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;
+        ///     li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>ApiResponse of ResultOfMessageObject</returns>
-        ApiResponse<ResultOfMessageObject> GetMessageWithHttpInfo (long? messageId, string xChannelToken = null);
+        ApiResponse<ResultOfMessageObject> GetMessageWithHttpInfo(long? messageId, string channelToken = null);
+
         /// <summary>
-        /// get Message List
+        ///     get Message List
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li
+        ///     &gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server
+        ///     error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li
+        ///     &gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not
+        ///     exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too
+        ///     many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;
+        ///     302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token
+        ///     is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;
+        ///     &lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page">greater than 1</param>
         /// <param name="pageSize">range is 1,50</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>ResultOfPageResponseOfMessageObject</returns>
-        ResultOfPageResponseOfMessageObject GetMessages (int? page, int? pageSize, string xChannelToken = null);
+        ResultOfPageResponseOfMessageObject GetMessages(int? page, int? pageSize, string channelToken = null);
 
         /// <summary>
-        /// get Message List
+        ///     get Message List
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li
+        ///     &gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server
+        ///     error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li
+        ///     &gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not
+        ///     exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too
+        ///     many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;
+        ///     302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token
+        ///     is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;
+        ///     &lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page">greater than 1</param>
         /// <param name="pageSize">range is 1,50</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>ApiResponse of ResultOfPageResponseOfMessageObject</returns>
-        ApiResponse<ResultOfPageResponseOfMessageObject> GetMessagesWithHttpInfo (int? page, int? pageSize, string xChannelToken = null);
+        ApiResponse<ResultOfPageResponseOfMessageObject> GetMessagesWithHttpInfo(int? page, int? pageSize,
+            string channelToken = null);
+
         #endregion Synchronous Operations
+
         #region Asynchronous Operations
+
         /// <summary>
-        /// push Message to a Channel
+        ///     push Message to a Channel
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li
+        ///     &gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body">body</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>Task of ResultOfMessagePushResponse</returns>
-        System.Threading.Tasks.Task<ResultOfMessagePushResponse> CreateMessageAsync (MessagePushRequest body, string xChannelToken = null);
+        Task<ResultOfMessagePushResponse> CreateMessageAsync(MessagePushRequest body, string channelToken = null);
 
         /// <summary>
-        /// push Message to a Channel
+        ///     push Message to a Channel
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li
+        ///     &gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body">body</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>Task of ApiResponse (ResultOfMessagePushResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<ResultOfMessagePushResponse>> CreateMessageAsyncWithHttpInfo (MessagePushRequest body, string xChannelToken = null);
+        Task<ApiResponse<ResultOfMessagePushResponse>> CreateMessageAsyncWithHttpInfo(MessagePushRequest body,
+            string channelToken = null);
+
         /// <summary>
-        /// delete a Channel Message
+        ///     delete a Channel Message
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;
+        ///     li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>Task of Result</returns>
-        System.Threading.Tasks.Task<Result> DeleteMessageAsync (long? messageId, string xChannelToken = null);
+        Task<Result> DeleteMessageAsync(long? messageId, string xChannelToken = null);
 
         /// <summary>
-        /// delete a Channel Message
+        ///     delete a Channel Message
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;
+        ///     li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>Task of ApiResponse (Result)</returns>
-        System.Threading.Tasks.Task<ApiResponse<Result>> DeleteMessageAsyncWithHttpInfo (long? messageId, string xChannelToken = null);
+        Task<ApiResponse<Result>> DeleteMessageAsyncWithHttpInfo(long? messageId, string channelToken = null);
+
         /// <summary>
-        /// get a Channel Message
+        ///     get a Channel Message
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;
+        ///     li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>Task of ResultOfMessageObject</returns>
-        System.Threading.Tasks.Task<ResultOfMessageObject> GetMessageAsync (long? messageId, string xChannelToken = null);
+        Task<ResultOfMessageObject> GetMessageAsync(long? messageId, string channelToken = null);
 
         /// <summary>
-        /// get a Channel Message
+        ///     get a Channel Message
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li
+        ///     &gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;
+        ///     li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists
+        ///     &lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205:
+        ///     permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301:
+        ///     duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is
+        ///     error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;
+        ///     li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>Task of ApiResponse (ResultOfMessageObject)</returns>
-        System.Threading.Tasks.Task<ApiResponse<ResultOfMessageObject>> GetMessageAsyncWithHttpInfo (long? messageId, string xChannelToken = null);
-        /// <summary>
-        /// get Message List
-        /// </summary>
-        /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </remarks>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="page">greater than 1</param>
-        /// <param name="pageSize">range is 1,50</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>Task of ResultOfPageResponseOfMessageObject</returns>
-        System.Threading.Tasks.Task<ResultOfPageResponseOfMessageObject> GetMessagesAsync (int? page, int? pageSize, string xChannelToken = null);
+        Task<ApiResponse<ResultOfMessageObject>> GetMessageAsyncWithHttpInfo(long? messageId,
+            string channelToken = null);
 
         /// <summary>
-        /// get Message List
+        ///     get Message List
         /// </summary>
         /// <remarks>
-        /// &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li
+        ///     &gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server
+        ///     error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li
+        ///     &gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not
+        ///     exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too
+        ///     many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;
+        ///     302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token
+        ///     is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;
+        ///     &lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
         /// </remarks>
         /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page">greater than 1</param>
         /// <param name="pageSize">range is 1,50</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>Task of ResultOfPageResponseOfMessageObject</returns>
+        Task<ResultOfPageResponseOfMessageObject>
+            GetMessagesAsync(int? page, int? pageSize, string channelToken = null);
+
+        /// <summary>
+        ///     get Message List
+        /// </summary>
+        /// <remarks>
+        ///     &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li
+        ///     &gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server
+        ///     error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li
+        ///     &gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not
+        ///     exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too
+        ///     many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;
+        ///     302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token
+        ///     is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;
+        ///     &lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        /// </remarks>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="page">greater than 1</param>
+        /// <param name="pageSize">range is 1,50</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
         /// <returns>Task of ApiResponse (ResultOfPageResponseOfMessageObject)</returns>
-        System.Threading.Tasks.Task<ApiResponse<ResultOfPageResponseOfMessageObject>> GetMessagesAsyncWithHttpInfo (int? page, int? pageSize, string xChannelToken = null);
+        Task<ApiResponse<ResultOfPageResponseOfMessageObject>> GetMessagesAsyncWithHttpInfo(int? page, int? pageSize,
+            string channelToken = null);
+
         #endregion Asynchronous Operations
     }
 
     /// <summary>
-    /// Represents a collection of functions to interact with the API endpoints
+    ///     Represents a collection of functions to interact with the API endpoints
     /// </summary>
-    public partial class DaDaPushMessageApi : IDaDaPushMessageApi
+    public class DaDaPushMessageApi : IDaDaPushMessageApi
     {
-        private Com.DaDaPush.Client.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
+        private ExceptionFactory _exceptionFactory = (name, response) => null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DaDaPushMessageApi"/> class.
+        ///     Initializes a new instance of the <see cref="DaDaPushMessageApi" /> class.
         /// </summary>
         /// <returns></returns>
-        public DaDaPushMessageApi(String basePath)
+        public DaDaPushMessageApi(string basePath)
         {
-            this.Configuration = new Com.DaDaPush.Client.Client.Configuration { BasePath = basePath };
+            Configuration = new Configuration {BasePath = basePath};
 
-            ExceptionFactory = Com.DaDaPush.Client.Client.Configuration.DefaultExceptionFactory;
+            ExceptionFactory = Configuration.DefaultExceptionFactory;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DaDaPushMessageApi"/> class
+        ///     Initializes a new instance of the <see cref="DaDaPushMessageApi" /> class
         /// </summary>
         /// <returns></returns>
         public DaDaPushMessageApi()
         {
-            this.Configuration = Com.DaDaPush.Client.Client.Configuration.Default;
+            Configuration = Configuration.Default;
 
-            ExceptionFactory = Com.DaDaPush.Client.Client.Configuration.DefaultExceptionFactory;
+            ExceptionFactory = Configuration.DefaultExceptionFactory;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DaDaPushMessageApi"/> class
-        /// using Configuration object
+        ///     Initializes a new instance of the <see cref="DaDaPushMessageApi" /> class
+        ///     using Configuration object
         /// </summary>
         /// <param name="configuration">An instance of Configuration</param>
         /// <returns></returns>
-        public DaDaPushMessageApi(Com.DaDaPush.Client.Client.Configuration configuration = null)
+        public DaDaPushMessageApi(Configuration configuration = null)
         {
-            if (configuration == null) // use the default one in Configuration
-                this.Configuration = Com.DaDaPush.Client.Client.Configuration.Default;
+            Configuration = configuration ?? Configuration.Default;
+
+            ExceptionFactory = Configuration.DefaultExceptionFactory;
+        }
+
+        /// <summary>
+        ///     Gets the base path of the API client.
+        /// </summary>
+        /// <value>The base path</value>
+        public string GetBasePath()
+        {
+            return Configuration.ApiClient.RestClient.BaseUrl.ToString();
+        }
+
+        /// <summary>
+        ///     Gets or sets the configuration object
+        /// </summary>
+        /// <value>An instance of the Configuration</value>
+        public Configuration Configuration { get; set; }
+
+        /// <summary>
+        ///     Provides a factory method hook for the creation of exceptions.
+        /// </summary>
+        public ExceptionFactory ExceptionFactory
+        {
+            get
+            {
+                if (_exceptionFactory != null && _exceptionFactory.GetInvocationList().Length > 1)
+                    throw new InvalidOperationException("Multicast delegate for ExceptionFactory is unsupported.");
+
+                return _exceptionFactory;
+            }
+            set => _exceptionFactory = value;
+        }
+
+        /// <summary>
+        ///     push Message to a Channel &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;
+        ///     30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:
+        ///     &lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists
+        ///     &lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;
+        ///     104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;
+        ///     /li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;
+        ///     /li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="body">body</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>ResultOfMessagePushResponse</returns>
+        public ResultOfMessagePushResponse CreateMessage(MessagePushRequest body, string channelToken = null)
+        {
+            var localVarResponse = CreateMessageWithHttpInfo(body, channelToken);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///     push Message to a Channel &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;
+        ///     30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:
+        ///     &lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists
+        ///     &lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;
+        ///     104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;
+        ///     /li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;
+        ///     /li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="body">body</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>ApiResponse of ResultOfMessagePushResponse</returns>
+        public ApiResponse<ResultOfMessagePushResponse> CreateMessageWithHttpInfo(MessagePushRequest body,
+            string channelToken = null)
+        {
+            // verify the required parameter 'body' is set
+            if (body == null)
+                throw new ApiException(400,
+                    "Missing required parameter 'body' when calling DaDaPushMessageApi->CreateMessage");
+
+            const string localVarPath = "/api/v1/message";
+            var localVarPathParams = new Dictionary<string, string>();
+            var localVarQueryParams = new List<KeyValuePair<string, string>>();
+            var localVarHeaderParams = new Dictionary<string, string>(Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<string, string>();
+            var localVarFileParams = new Dictionary<string, FileParameter>();
+            object localVarPostBody;
+
+            // to determine the Content-Type header
+            string[] localVarHttpContentTypes =
+            {
+                "application/json"
+            };
+            var localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            string[] localVarHttpHeaderAccepts =
+            {
+                "application/json"
+            };
+            var localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            if (channelToken != null)
+                localVarHeaderParams.Add("x-channel-token",
+                    Configuration.ApiClient.ParameterToString(channelToken)); // header parameter
+            if (body.GetType() != typeof(byte[]))
+                localVarPostBody = Configuration.ApiClient.Serialize(body); // http body (model) parameter
             else
-                this.Configuration = configuration;
+                localVarPostBody = body; // byte array
 
-            ExceptionFactory = Com.DaDaPush.Client.Client.Configuration.DefaultExceptionFactory;
+
+            // make the HTTP request
+            var localVarResponse = (IRestResponse) Configuration.ApiClient.CallApi(localVarPath,
+                Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams,
+                localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            var localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory == null)
+                return new ApiResponse<ResultOfMessagePushResponse>(localVarStatusCode,
+                    localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                    (ResultOfMessagePushResponse) Configuration.ApiClient.Deserialize(localVarResponse,
+                        typeof(ResultOfMessagePushResponse)));
+            var exception = ExceptionFactory("CreateMessage", localVarResponse);
+            if (exception != null) throw exception;
+
+            return new ApiResponse<ResultOfMessagePushResponse>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                (ResultOfMessagePushResponse) Configuration.ApiClient.Deserialize(localVarResponse,
+                    typeof(ResultOfMessagePushResponse)));
         }
 
         /// <summary>
-        /// Gets the base path of the API client.
+        ///     push Message to a Channel &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;
+        ///     30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:
+        ///     &lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists
+        ///     &lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;
+        ///     104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;
+        ///     /li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;
+        ///     /li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
         /// </summary>
-        /// <value>The base path</value>
-        public String GetBasePath()
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="body">body</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>Task of ResultOfMessagePushResponse</returns>
+        public async Task<ResultOfMessagePushResponse> CreateMessageAsync(MessagePushRequest body,
+            string channelToken = null)
         {
-            return this.Configuration.ApiClient.RestClient.BaseUrl.ToString();
+            var localVarResponse = await CreateMessageAsyncWithHttpInfo(body, channelToken);
+            return localVarResponse.Data;
         }
 
         /// <summary>
-        /// Sets the base path of the API client.
+        ///     push Message to a Channel &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;
+        ///     30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:
+        ///     &lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists
+        ///     &lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;
+        ///     104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;
+        ///     /li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;
+        ///     /li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="body">body</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>Task of ApiResponse (ResultOfMessagePushResponse)</returns>
+        public async Task<ApiResponse<ResultOfMessagePushResponse>> CreateMessageAsyncWithHttpInfo(
+            MessagePushRequest body, string channelToken = null)
+        {
+            // verify the required parameter 'body' is set
+            if (body == null)
+                throw new ApiException(400,
+                    "Missing required parameter 'body' when calling DaDaPushMessageApi->CreateMessage");
+
+            const string localVarPath = "/api/v1/message";
+            var localVarPathParams = new Dictionary<string, string>();
+            var localVarQueryParams = new List<KeyValuePair<string, string>>();
+            var localVarHeaderParams = new Dictionary<string, string>(Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<string, string>();
+            var localVarFileParams = new Dictionary<string, FileParameter>();
+            object localVarPostBody;
+
+            // to determine the Content-Type header
+            string[] localVarHttpContentTypes =
+            {
+                "application/json"
+            };
+            var localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            string[] localVarHttpHeaderAccepts =
+            {
+                "application/json"
+            };
+            var localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            if (channelToken != null)
+                localVarHeaderParams.Add("x-channel-token",
+                    Configuration.ApiClient.ParameterToString(channelToken)); // header parameter
+            if (body.GetType() != typeof(byte[]))
+                localVarPostBody = Configuration.ApiClient.Serialize(body); // http body (model) parameter
+            else
+                localVarPostBody = body; // byte array
+
+
+            // make the HTTP request
+            var localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
+                Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams,
+                localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            var localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory == null)
+                return new ApiResponse<ResultOfMessagePushResponse>(localVarStatusCode,
+                    localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                    (ResultOfMessagePushResponse) Configuration.ApiClient.Deserialize(localVarResponse,
+                        typeof(ResultOfMessagePushResponse)));
+            var exception = ExceptionFactory("CreateMessage", localVarResponse);
+            if (exception != null) throw exception;
+
+            return new ApiResponse<ResultOfMessagePushResponse>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                (ResultOfMessagePushResponse) Configuration.ApiClient.Deserialize(localVarResponse,
+                    typeof(ResultOfMessagePushResponse)));
+        }
+
+        /// <summary>
+        ///     delete a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;
+        ///     100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:
+        ///     &lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists
+        ///     &lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;
+        ///     104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;
+        ///     /li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;
+        ///     /li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="messageId">messageId</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>Result</returns>
+        public Result DeleteMessage(long? messageId, string channelToken = null)
+        {
+            var localVarResponse = DeleteMessageWithHttpInfo(messageId, channelToken);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///     delete a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;
+        ///     100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:
+        ///     &lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists
+        ///     &lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;
+        ///     104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;
+        ///     /li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;
+        ///     /li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="messageId">messageId</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>ApiResponse of Result</returns>
+        public ApiResponse<Result> DeleteMessageWithHttpInfo(long? messageId, string channelToken = null)
+        {
+            // verify the required parameter 'messageId' is set
+            if (messageId == null)
+                throw new ApiException(400,
+                    "Missing required parameter 'messageId' when calling DaDaPushMessageApi->DeleteMessage");
+
+            const string localVarPath = "/api/v1/message/{messageId}";
+            var localVarPathParams = new Dictionary<string, string>();
+            var localVarQueryParams = new List<KeyValuePair<string, string>>();
+            var localVarHeaderParams = new Dictionary<string, string>(Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<string, string>();
+            var localVarFileParams = new Dictionary<string, FileParameter>();
+            object localVarPostBody = null;
+
+            // to determine the Content-Type header
+            string[] localVarHttpContentTypes =
+            {
+            };
+            var localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            string[] localVarHttpHeaderAccepts =
+            {
+                "application/json"
+            };
+            var localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            localVarPathParams.Add("messageId", Configuration.ApiClient.ParameterToString(messageId)); // path parameter
+            if (channelToken != null)
+                localVarHeaderParams.Add("x-channel-token",
+                    Configuration.ApiClient.ParameterToString(channelToken)); // header parameter
+
+
+            // make the HTTP request
+            var localVarResponse = (IRestResponse) Configuration.ApiClient.CallApi(localVarPath,
+                Method.DELETE, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams,
+                localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            var localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory == null)
+                return new ApiResponse<Result>(localVarStatusCode,
+                    localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                    (Result) Configuration.ApiClient.Deserialize(localVarResponse, typeof(Result)));
+            var exception = ExceptionFactory("DeleteMessage", localVarResponse);
+            if (exception != null) throw exception;
+
+            return new ApiResponse<Result>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                (Result) Configuration.ApiClient.Deserialize(localVarResponse, typeof(Result)));
+        }
+
+        /// <summary>
+        ///     delete a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;
+        ///     100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:
+        ///     &lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists
+        ///     &lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;
+        ///     104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;
+        ///     /li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;
+        ///     /li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="messageId">messageId</param>
+        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>Task of Result</returns>
+        public async Task<Result> DeleteMessageAsync(long? messageId, string xChannelToken = null)
+        {
+            var localVarResponse = await DeleteMessageAsyncWithHttpInfo(messageId, xChannelToken);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///     delete a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;
+        ///     100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:
+        ///     &lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists
+        ///     &lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;
+        ///     104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;
+        ///     /li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;
+        ///     /li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="messageId">messageId</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>Task of ApiResponse (Result)</returns>
+        public async Task<ApiResponse<Result>> DeleteMessageAsyncWithHttpInfo(long? messageId,
+            string channelToken = null)
+        {
+            // verify the required parameter 'messageId' is set
+            if (messageId == null)
+                throw new ApiException(400,
+                    "Missing required parameter 'messageId' when calling DaDaPushMessageApi->DeleteMessage");
+
+            const string localVarPath = "/api/v1/message/{messageId}";
+            var localVarPathParams = new Dictionary<string, string>();
+            var localVarQueryParams = new List<KeyValuePair<string, string>>();
+            var localVarHeaderParams = new Dictionary<string, string>(Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<string, string>();
+            var localVarFileParams = new Dictionary<string, FileParameter>();
+            object localVarPostBody = null;
+
+            // to determine the Content-Type header
+            string[] localVarHttpContentTypes =
+            {
+            };
+            var localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            string[] localVarHttpHeaderAccepts =
+            {
+                "application/json"
+            };
+            var localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            localVarPathParams.Add("messageId", Configuration.ApiClient.ParameterToString(messageId)); // path parameter
+            if (channelToken != null)
+                localVarHeaderParams.Add("x-channel-token",
+                    Configuration.ApiClient.ParameterToString(channelToken)); // header parameter
+
+
+            // make the HTTP request
+            var localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
+                Method.DELETE, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams,
+                localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            var localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory == null)
+                return new ApiResponse<Result>(localVarStatusCode,
+                    localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                    (Result) Configuration.ApiClient.Deserialize(localVarResponse, typeof(Result)));
+            var exception = ExceptionFactory("DeleteMessage", localVarResponse);
+            if (exception != null) throw exception;
+
+            return new ApiResponse<Result>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                (Result) Configuration.ApiClient.Deserialize(localVarResponse, typeof(Result)));
+        }
+
+        /// <summary>
+        ///     get a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100
+        ///     request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;
+        ///     /h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;
+        ///     /li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li
+        ///     &gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li
+        ///     &gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="messageId">messageId</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>ResultOfMessageObject</returns>
+        public ResultOfMessageObject GetMessage(long? messageId, string channelToken = null)
+        {
+            var localVarResponse = GetMessageWithHttpInfo(messageId, channelToken);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///     get a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100
+        ///     request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;
+        ///     /h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;
+        ///     /li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li
+        ///     &gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li
+        ///     &gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="messageId">messageId</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>ApiResponse of ResultOfMessageObject</returns>
+        public ApiResponse<ResultOfMessageObject> GetMessageWithHttpInfo(long? messageId, string channelToken = null)
+        {
+            // verify the required parameter 'messageId' is set
+            if (messageId == null)
+                throw new ApiException(400,
+                    "Missing required parameter 'messageId' when calling DaDaPushMessageApi->GetMessage");
+
+            const string localVarPath = "/api/v1/message/{messageId}";
+            var localVarPathParams = new Dictionary<string, string>();
+            var localVarQueryParams = new List<KeyValuePair<string, string>>();
+            var localVarHeaderParams = new Dictionary<string, string>(Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<string, string>();
+            var localVarFileParams = new Dictionary<string, FileParameter>();
+            object localVarPostBody = null;
+
+            // to determine the Content-Type header
+            var localVarHttpContentTypes = new string[]
+            {
+            };
+            var localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            var localVarHttpHeaderAccepts = new[]
+            {
+                "application/json"
+            };
+            var localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            localVarPathParams.Add("messageId", Configuration.ApiClient.ParameterToString(messageId)); // path parameter
+            if (channelToken != null)
+                localVarHeaderParams.Add("x-channel-token",
+                    Configuration.ApiClient.ParameterToString(channelToken)); // header parameter
+
+
+            // make the HTTP request
+            var localVarResponse = (IRestResponse) Configuration.ApiClient.CallApi(localVarPath,
+                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams,
+                localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            var localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory == null)
+                return new ApiResponse<ResultOfMessageObject>(localVarStatusCode,
+                    localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                    (ResultOfMessageObject) Configuration.ApiClient.Deserialize(localVarResponse,
+                        typeof(ResultOfMessageObject)));
+            var exception = ExceptionFactory("GetMessage", localVarResponse);
+            if (exception != null) throw exception;
+
+            return new ApiResponse<ResultOfMessageObject>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                (ResultOfMessageObject) Configuration.ApiClient.Deserialize(localVarResponse,
+                    typeof(ResultOfMessageObject)));
+        }
+
+        /// <summary>
+        ///     get a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100
+        ///     request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;
+        ///     /h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;
+        ///     /li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li
+        ///     &gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li
+        ///     &gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="messageId">messageId</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>Task of ResultOfMessageObject</returns>
+        public async Task<ResultOfMessageObject> GetMessageAsync(long? messageId, string channelToken = null)
+        {
+            var localVarResponse =
+                await GetMessageAsyncWithHttpInfo(messageId, channelToken);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///     get a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100
+        ///     request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;
+        ///     /h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;
+        ///     /li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104:
+        ///     channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li
+        ///     &gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li
+        ///     &gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303:
+        ///     user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is
+        ///     disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel
+        ///     &lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="messageId">messageId</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>Task of ApiResponse (ResultOfMessageObject)</returns>
+        public async Task<ApiResponse<ResultOfMessageObject>> GetMessageAsyncWithHttpInfo(long? messageId,
+            string channelToken = null)
+        {
+            // verify the required parameter 'messageId' is set
+            if (messageId == null)
+                throw new ApiException(400,
+                    "Missing required parameter 'messageId' when calling DaDaPushMessageApi->GetMessage");
+
+            const string localVarPath = "/api/v1/message/{messageId}";
+            var localVarPathParams = new Dictionary<string, string>();
+            var localVarQueryParams = new List<KeyValuePair<string, string>>();
+            var localVarHeaderParams = new Dictionary<string, string>(Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<string, string>();
+            var localVarFileParams = new Dictionary<string, FileParameter>();
+            object localVarPostBody = null;
+
+            // to determine the Content-Type header
+            var localVarHttpContentTypes = new string[]
+            {
+            };
+            var localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            var localVarHttpHeaderAccepts = new[]
+            {
+                "application/json"
+            };
+            var localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            localVarPathParams.Add("messageId", Configuration.ApiClient.ParameterToString(messageId)); // path parameter
+            if (channelToken != null)
+                localVarHeaderParams.Add("x-channel-token",
+                    Configuration.ApiClient.ParameterToString(channelToken)); // header parameter
+
+
+            // make the HTTP request
+            var localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
+                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams,
+                localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            var localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory == null)
+                return new ApiResponse<ResultOfMessageObject>(localVarStatusCode,
+                    localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                    (ResultOfMessageObject) Configuration.ApiClient.Deserialize(localVarResponse,
+                        typeof(ResultOfMessageObject)));
+            var exception = ExceptionFactory("GetMessage", localVarResponse);
+            if (exception != null) throw exception;
+
+            return new ApiResponse<ResultOfMessageObject>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                (ResultOfMessageObject) Configuration.ApiClient.Deserialize(localVarResponse,
+                    typeof(ResultOfMessageObject)));
+        }
+
+        /// <summary>
+        ///     get Message List &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45
+        ///     request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li
+        ///     &gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not
+        ///     exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li
+        ///     &gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li
+        ///     &gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate
+        ///     username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li
+        ///     &gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306:
+        ///     your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="page">greater than 1</param>
+        /// <param name="pageSize">range is 1,50</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>ResultOfPageResponseOfMessageObject</returns>
+        public ResultOfPageResponseOfMessageObject GetMessages(int? page, int? pageSize, string channelToken = null)
+        {
+            var localVarResponse = GetMessagesWithHttpInfo(page, pageSize, channelToken);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///     get Message List &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45
+        ///     request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li
+        ///     &gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not
+        ///     exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li
+        ///     &gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li
+        ///     &gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate
+        ///     username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li
+        ///     &gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306:
+        ///     your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="page">greater than 1</param>
+        /// <param name="pageSize">range is 1,50</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>ApiResponse of ResultOfPageResponseOfMessageObject</returns>
+        public ApiResponse<ResultOfPageResponseOfMessageObject> GetMessagesWithHttpInfo(int? page, int? pageSize,
+            string channelToken = null)
+        {
+            // verify the required parameter 'page' is set
+            if (page == null)
+                throw new ApiException(400,
+                    "Missing required parameter 'page' when calling DaDaPushMessageApi->GetMessages");
+            // verify the required parameter 'pageSize' is set
+            if (pageSize == null)
+                throw new ApiException(400,
+                    "Missing required parameter 'pageSize' when calling DaDaPushMessageApi->GetMessages");
+
+            const string localVarPath = "/api/v1/messages";
+            var localVarPathParams = new Dictionary<string, string>();
+            var localVarQueryParams = new List<KeyValuePair<string, string>>();
+            var localVarHeaderParams = new Dictionary<string, string>(Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<string, string>();
+            var localVarFileParams = new Dictionary<string, FileParameter>();
+            object localVarPostBody = null;
+
+            // to determine the Content-Type header
+            var localVarHttpContentTypes = new string[]
+            {
+            };
+            var localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            var localVarHttpHeaderAccepts = new[]
+            {
+                "application/json"
+            };
+            var localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            localVarQueryParams.AddRange(
+                Configuration.ApiClient.ParameterToKeyValuePairs("", "page", page)); // query parameter
+            localVarQueryParams.AddRange(
+                Configuration.ApiClient.ParameterToKeyValuePairs("", "pageSize", pageSize)); // query parameter
+            if (channelToken != null)
+                localVarHeaderParams.Add("x-channel-token",
+                    Configuration.ApiClient.ParameterToString(channelToken)); // header parameter
+
+
+            // make the HTTP request
+            var localVarResponse = (IRestResponse) Configuration.ApiClient.CallApi(localVarPath,
+                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams,
+                localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            var localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory == null)
+                return new ApiResponse<ResultOfPageResponseOfMessageObject>(localVarStatusCode,
+                    localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                    (ResultOfPageResponseOfMessageObject) Configuration.ApiClient.Deserialize(localVarResponse,
+                        typeof(ResultOfPageResponseOfMessageObject)));
+            var exception = ExceptionFactory("GetMessages", localVarResponse);
+            if (exception != null) throw exception;
+
+            return new ApiResponse<ResultOfPageResponseOfMessageObject>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                (ResultOfPageResponseOfMessageObject) Configuration.ApiClient.Deserialize(localVarResponse,
+                    typeof(ResultOfPageResponseOfMessageObject)));
+        }
+
+        /// <summary>
+        ///     get Message List &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45
+        ///     request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li
+        ///     &gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not
+        ///     exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li
+        ///     &gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li
+        ///     &gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate
+        ///     username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li
+        ///     &gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306:
+        ///     your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="page">greater than 1</param>
+        /// <param name="pageSize">range is 1,50</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>Task of ResultOfPageResponseOfMessageObject</returns>
+        public async Task<ResultOfPageResponseOfMessageObject> GetMessagesAsync(int? page, int? pageSize,
+            string channelToken = null)
+        {
+            var localVarResponse = await GetMessagesAsyncWithHttpInfo(page, pageSize, channelToken);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///     get Message List &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45
+        ///     request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li
+        ///     &gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not
+        ///     exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li
+        ///     &gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li
+        ///     &gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate
+        ///     username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li
+        ///     &gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306:
+        ///     your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
+        /// </summary>
+        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="page">greater than 1</param>
+        /// <param name="pageSize">range is 1,50</param>
+        /// <param name="channelToken">see: https://www.dadapush.com/channel/list </param>
+        /// <returns>Task of ApiResponse (ResultOfPageResponseOfMessageObject)</returns>
+        public async Task<ApiResponse<ResultOfPageResponseOfMessageObject>> GetMessagesAsyncWithHttpInfo(int? page,
+            int? pageSize, string channelToken = null)
+        {
+            // verify the required parameter 'page' is set
+            if (page == null)
+                throw new ApiException(400,
+                    "Missing required parameter 'page' when calling DaDaPushMessageApi->GetMessages");
+            // verify the required parameter 'pageSize' is set
+            if (pageSize == null)
+                throw new ApiException(400,
+                    "Missing required parameter 'pageSize' when calling DaDaPushMessageApi->GetMessages");
+
+            const string localVarPath = "/api/v1/messages";
+            var localVarPathParams = new Dictionary<string, string>();
+            var localVarQueryParams = new List<KeyValuePair<string, string>>();
+            var localVarHeaderParams = new Dictionary<string, string>(Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<string, string>();
+            var localVarFileParams = new Dictionary<string, FileParameter>();
+            object localVarPostBody = null;
+
+            // to determine the Content-Type header
+            var localVarHttpContentTypes = new string[]
+            {
+            };
+            var localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            var localVarHttpHeaderAccepts = new[]
+            {
+                "application/json"
+            };
+            var localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            localVarQueryParams.AddRange(
+                Configuration.ApiClient.ParameterToKeyValuePairs("", "page", page)); // query parameter
+            localVarQueryParams.AddRange(
+                Configuration.ApiClient.ParameterToKeyValuePairs("", "pageSize", pageSize)); // query parameter
+            if (channelToken != null)
+                localVarHeaderParams.Add("x-channel-token",
+                    Configuration.ApiClient.ParameterToString(channelToken)); // header parameter
+
+
+            // make the HTTP request
+            var localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
+                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams,
+                localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            var localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory == null)
+                return new ApiResponse<ResultOfPageResponseOfMessageObject>(localVarStatusCode,
+                    localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                    (ResultOfPageResponseOfMessageObject) Configuration.ApiClient.Deserialize(localVarResponse,
+                        typeof(ResultOfPageResponseOfMessageObject)));
+            var exception = ExceptionFactory("GetMessages", localVarResponse);
+            if (exception != null) throw exception;
+
+            return new ApiResponse<ResultOfPageResponseOfMessageObject>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
+                (ResultOfPageResponseOfMessageObject) Configuration.ApiClient.Deserialize(localVarResponse,
+                    typeof(ResultOfPageResponseOfMessageObject)));
+        }
+
+        /// <summary>
+        ///     Sets the base path of the API client.
         /// </summary>
         /// <value>The base path</value>
-        [Obsolete("SetBasePath is deprecated, please do 'Configuration.ApiClient = new ApiClient(\"http://new-path\")' instead.")]
-        public void SetBasePath(String basePath)
+        [Obsolete(
+            "SetBasePath is deprecated, please do 'Configuration.ApiClient = new ApiClient(\"http://new-path\")' instead.")]
+        public void SetBasePath(string basePath)
         {
             // do nothing
         }
 
         /// <summary>
-        /// Gets or sets the configuration object
-        /// </summary>
-        /// <value>An instance of the Configuration</value>
-        public Com.DaDaPush.Client.Client.Configuration Configuration {get; set;}
-
-        /// <summary>
-        /// Provides a factory method hook for the creation of exceptions.
-        /// </summary>
-        public Com.DaDaPush.Client.Client.ExceptionFactory ExceptionFactory
-        {
-            get
-            {
-                if (_exceptionFactory != null && _exceptionFactory.GetInvocationList().Length > 1)
-                {
-                    throw new InvalidOperationException("Multicast delegate for ExceptionFactory is unsupported.");
-                }
-                return _exceptionFactory;
-            }
-            set { _exceptionFactory = value; }
-        }
-
-        /// <summary>
-        /// Gets the default header.
+        ///     Gets the default header.
         /// </summary>
         /// <returns>Dictionary of HTTP header</returns>
         [Obsolete("DefaultHeader is deprecated, please use Configuration.DefaultHeader instead.")]
-        public IDictionary<String, String> DefaultHeader()
+        public IDictionary<string, string> DefaultHeader()
         {
-            return new ReadOnlyDictionary<string, string>(this.Configuration.DefaultHeader);
+            return new ReadOnlyDictionary<string, string>(Configuration.DefaultHeader);
         }
 
         /// <summary>
-        /// Add default header.
+        ///     Add default header.
         /// </summary>
         /// <param name="key">Header field name.</param>
         /// <param name="value">Header field value.</param>
@@ -322,592 +1260,7 @@ namespace Com.DaDaPush.Client.Api
         [Obsolete("AddDefaultHeader is deprecated, please use Configuration.AddDefaultHeader instead.")]
         public void AddDefaultHeader(string key, string value)
         {
-            this.Configuration.AddDefaultHeader(key, value);
+            Configuration.AddDefaultHeader(key, value);
         }
-
-        /// <summary>
-        /// push Message to a Channel &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="body">body</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>ResultOfMessagePushResponse</returns>
-        public ResultOfMessagePushResponse CreateMessage (MessagePushRequest body, string xChannelToken = null)
-        {
-             ApiResponse<ResultOfMessagePushResponse> localVarResponse = CreateMessageWithHttpInfo(body, xChannelToken);
-             return localVarResponse.Data;
-        }
-
-        /// <summary>
-        /// push Message to a Channel &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="body">body</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>ApiResponse of ResultOfMessagePushResponse</returns>
-        public ApiResponse< ResultOfMessagePushResponse > CreateMessageWithHttpInfo (MessagePushRequest body, string xChannelToken = null)
-        {
-            // verify the required parameter 'body' is set
-            if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling DaDaPushMessageApi->CreateMessage");
-
-            var localVarPath = "/api/v1/message";
-            var localVarPathParams = new Dictionary<String, String>();
-            var localVarQueryParams = new List<KeyValuePair<String, String>>();
-            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
-            var localVarFormParams = new Dictionary<String, String>();
-            var localVarFileParams = new Dictionary<String, FileParameter>();
-            Object localVarPostBody = null;
-
-            // to determine the Content-Type header
-            String[] localVarHttpContentTypes = new String[] {
-                "application/json"
-            };
-            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-
-            // to determine the Accept header
-            String[] localVarHttpHeaderAccepts = new String[] {
-                "application/json"
-            };
-            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-            if (localVarHttpHeaderAccept != null)
-                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-
-            if (xChannelToken != null) localVarHeaderParams.Add("x-channel-token", this.Configuration.ApiClient.ParameterToString(xChannelToken)); // header parameter
-            if (body != null && body.GetType() != typeof(byte[]))
-            {
-                localVarPostBody = this.Configuration.ApiClient.Serialize(body); // http body (model) parameter
-            }
-            else
-            {
-                localVarPostBody = body; // byte array
-            }
-
-
-            // make the HTTP request
-            IRestResponse localVarResponse = (IRestResponse) this.Configuration.ApiClient.CallApi(localVarPath,
-                Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-                localVarPathParams, localVarHttpContentType);
-
-            int localVarStatusCode = (int) localVarResponse.StatusCode;
-
-            if (ExceptionFactory != null)
-            {
-                Exception exception = ExceptionFactory("CreateMessage", localVarResponse);
-                if (exception != null) throw exception;
-            }
-
-            return new ApiResponse<ResultOfMessagePushResponse>(localVarStatusCode,
-                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
-                (ResultOfMessagePushResponse) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ResultOfMessagePushResponse)));
-        }
-
-        /// <summary>
-        /// push Message to a Channel &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="body">body</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>Task of ResultOfMessagePushResponse</returns>
-        public async System.Threading.Tasks.Task<ResultOfMessagePushResponse> CreateMessageAsync (MessagePushRequest body, string xChannelToken = null)
-        {
-             ApiResponse<ResultOfMessagePushResponse> localVarResponse = await CreateMessageAsyncWithHttpInfo(body, xChannelToken);
-             return localVarResponse.Data;
-
-        }
-
-        /// <summary>
-        /// push Message to a Channel &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;30 request per 1m&lt;/li&gt;&lt;li&gt;500 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="body">body</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>Task of ApiResponse (ResultOfMessagePushResponse)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<ResultOfMessagePushResponse>> CreateMessageAsyncWithHttpInfo (MessagePushRequest body, string xChannelToken = null)
-        {
-            // verify the required parameter 'body' is set
-            if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling DaDaPushMessageApi->CreateMessage");
-
-            var localVarPath = "/api/v1/message";
-            var localVarPathParams = new Dictionary<String, String>();
-            var localVarQueryParams = new List<KeyValuePair<String, String>>();
-            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
-            var localVarFormParams = new Dictionary<String, String>();
-            var localVarFileParams = new Dictionary<String, FileParameter>();
-            Object localVarPostBody = null;
-
-            // to determine the Content-Type header
-            String[] localVarHttpContentTypes = new String[] {
-                "application/json"
-            };
-            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-
-            // to determine the Accept header
-            String[] localVarHttpHeaderAccepts = new String[] {
-                "application/json"
-            };
-            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-            if (localVarHttpHeaderAccept != null)
-                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-
-            if (xChannelToken != null) localVarHeaderParams.Add("x-channel-token", this.Configuration.ApiClient.ParameterToString(xChannelToken)); // header parameter
-            if (body != null && body.GetType() != typeof(byte[]))
-            {
-                localVarPostBody = this.Configuration.ApiClient.Serialize(body); // http body (model) parameter
-            }
-            else
-            {
-                localVarPostBody = body; // byte array
-            }
-
-
-            // make the HTTP request
-            IRestResponse localVarResponse = (IRestResponse) await this.Configuration.ApiClient.CallApiAsync(localVarPath,
-                Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-                localVarPathParams, localVarHttpContentType);
-
-            int localVarStatusCode = (int) localVarResponse.StatusCode;
-
-            if (ExceptionFactory != null)
-            {
-                Exception exception = ExceptionFactory("CreateMessage", localVarResponse);
-                if (exception != null) throw exception;
-            }
-
-            return new ApiResponse<ResultOfMessagePushResponse>(localVarStatusCode,
-                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
-                (ResultOfMessagePushResponse) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ResultOfMessagePushResponse)));
-        }
-
-        /// <summary>
-        /// delete a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>Result</returns>
-        public Result DeleteMessage (long? messageId, string xChannelToken = null)
-        {
-             ApiResponse<Result> localVarResponse = DeleteMessageWithHttpInfo(messageId, xChannelToken);
-             return localVarResponse.Data;
-        }
-
-        /// <summary>
-        /// delete a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>ApiResponse of Result</returns>
-        public ApiResponse< Result > DeleteMessageWithHttpInfo (long? messageId, string xChannelToken = null)
-        {
-            // verify the required parameter 'messageId' is set
-            if (messageId == null)
-                throw new ApiException(400, "Missing required parameter 'messageId' when calling DaDaPushMessageApi->DeleteMessage");
-
-            var localVarPath = "/api/v1/message/{messageId}";
-            var localVarPathParams = new Dictionary<String, String>();
-            var localVarQueryParams = new List<KeyValuePair<String, String>>();
-            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
-            var localVarFormParams = new Dictionary<String, String>();
-            var localVarFileParams = new Dictionary<String, FileParameter>();
-            Object localVarPostBody = null;
-
-            // to determine the Content-Type header
-            String[] localVarHttpContentTypes = new String[] {
-            };
-            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-
-            // to determine the Accept header
-            String[] localVarHttpHeaderAccepts = new String[] {
-                "application/json"
-            };
-            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-            if (localVarHttpHeaderAccept != null)
-                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-
-            if (messageId != null) localVarPathParams.Add("messageId", this.Configuration.ApiClient.ParameterToString(messageId)); // path parameter
-            if (xChannelToken != null) localVarHeaderParams.Add("x-channel-token", this.Configuration.ApiClient.ParameterToString(xChannelToken)); // header parameter
-
-
-            // make the HTTP request
-            IRestResponse localVarResponse = (IRestResponse) this.Configuration.ApiClient.CallApi(localVarPath,
-                Method.DELETE, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-                localVarPathParams, localVarHttpContentType);
-
-            int localVarStatusCode = (int) localVarResponse.StatusCode;
-
-            if (ExceptionFactory != null)
-            {
-                Exception exception = ExceptionFactory("DeleteMessage", localVarResponse);
-                if (exception != null) throw exception;
-            }
-
-            return new ApiResponse<Result>(localVarStatusCode,
-                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
-                (Result) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(Result)));
-        }
-
-        /// <summary>
-        /// delete a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>Task of Result</returns>
-        public async System.Threading.Tasks.Task<Result> DeleteMessageAsync (long? messageId, string xChannelToken = null)
-        {
-             ApiResponse<Result> localVarResponse = await DeleteMessageAsyncWithHttpInfo(messageId, xChannelToken);
-             return localVarResponse.Data;
-
-        }
-
-        /// <summary>
-        /// delete a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>Task of ApiResponse (Result)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<Result>> DeleteMessageAsyncWithHttpInfo (long? messageId, string xChannelToken = null)
-        {
-            // verify the required parameter 'messageId' is set
-            if (messageId == null)
-                throw new ApiException(400, "Missing required parameter 'messageId' when calling DaDaPushMessageApi->DeleteMessage");
-
-            var localVarPath = "/api/v1/message/{messageId}";
-            var localVarPathParams = new Dictionary<String, String>();
-            var localVarQueryParams = new List<KeyValuePair<String, String>>();
-            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
-            var localVarFormParams = new Dictionary<String, String>();
-            var localVarFileParams = new Dictionary<String, FileParameter>();
-            Object localVarPostBody = null;
-
-            // to determine the Content-Type header
-            String[] localVarHttpContentTypes = new String[] {
-            };
-            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-
-            // to determine the Accept header
-            String[] localVarHttpHeaderAccepts = new String[] {
-                "application/json"
-            };
-            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-            if (localVarHttpHeaderAccept != null)
-                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-
-            if (messageId != null) localVarPathParams.Add("messageId", this.Configuration.ApiClient.ParameterToString(messageId)); // path parameter
-            if (xChannelToken != null) localVarHeaderParams.Add("x-channel-token", this.Configuration.ApiClient.ParameterToString(xChannelToken)); // header parameter
-
-
-            // make the HTTP request
-            IRestResponse localVarResponse = (IRestResponse) await this.Configuration.ApiClient.CallApiAsync(localVarPath,
-                Method.DELETE, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-                localVarPathParams, localVarHttpContentType);
-
-            int localVarStatusCode = (int) localVarResponse.StatusCode;
-
-            if (ExceptionFactory != null)
-            {
-                Exception exception = ExceptionFactory("DeleteMessage", localVarResponse);
-                if (exception != null) throw exception;
-            }
-
-            return new ApiResponse<Result>(localVarStatusCode,
-                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
-                (Result) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(Result)));
-        }
-
-        /// <summary>
-        /// get a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>ResultOfMessageObject</returns>
-        public ResultOfMessageObject GetMessage (long? messageId, string xChannelToken = null)
-        {
-             ApiResponse<ResultOfMessageObject> localVarResponse = GetMessageWithHttpInfo(messageId, xChannelToken);
-             return localVarResponse.Data;
-        }
-
-        /// <summary>
-        /// get a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>ApiResponse of ResultOfMessageObject</returns>
-        public ApiResponse< ResultOfMessageObject > GetMessageWithHttpInfo (long? messageId, string xChannelToken = null)
-        {
-            // verify the required parameter 'messageId' is set
-            if (messageId == null)
-                throw new ApiException(400, "Missing required parameter 'messageId' when calling DaDaPushMessageApi->GetMessage");
-
-            var localVarPath = "/api/v1/message/{messageId}";
-            var localVarPathParams = new Dictionary<String, String>();
-            var localVarQueryParams = new List<KeyValuePair<String, String>>();
-            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
-            var localVarFormParams = new Dictionary<String, String>();
-            var localVarFileParams = new Dictionary<String, FileParameter>();
-            Object localVarPostBody = null;
-
-            // to determine the Content-Type header
-            String[] localVarHttpContentTypes = new String[] {
-            };
-            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-
-            // to determine the Accept header
-            String[] localVarHttpHeaderAccepts = new String[] {
-                "application/json"
-            };
-            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-            if (localVarHttpHeaderAccept != null)
-                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-
-            if (messageId != null) localVarPathParams.Add("messageId", this.Configuration.ApiClient.ParameterToString(messageId)); // path parameter
-            if (xChannelToken != null) localVarHeaderParams.Add("x-channel-token", this.Configuration.ApiClient.ParameterToString(xChannelToken)); // header parameter
-
-
-            // make the HTTP request
-            IRestResponse localVarResponse = (IRestResponse) this.Configuration.ApiClient.CallApi(localVarPath,
-                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-                localVarPathParams, localVarHttpContentType);
-
-            int localVarStatusCode = (int) localVarResponse.StatusCode;
-
-            if (ExceptionFactory != null)
-            {
-                Exception exception = ExceptionFactory("GetMessage", localVarResponse);
-                if (exception != null) throw exception;
-            }
-
-            return new ApiResponse<ResultOfMessageObject>(localVarStatusCode,
-                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
-                (ResultOfMessageObject) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ResultOfMessageObject)));
-        }
-
-        /// <summary>
-        /// get a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>Task of ResultOfMessageObject</returns>
-        public async System.Threading.Tasks.Task<ResultOfMessageObject> GetMessageAsync (long? messageId, string xChannelToken = null)
-        {
-             ApiResponse<ResultOfMessageObject> localVarResponse = await GetMessageAsyncWithHttpInfo(messageId, xChannelToken);
-             return localVarResponse.Data;
-
-        }
-
-        /// <summary>
-        /// get a Channel Message &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;10 request per 1s&lt;/li&gt;&lt;li&gt;100 request per 1m&lt;/li&gt;&lt;li&gt;1000 request per 1h&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="messageId">messageId</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>Task of ApiResponse (ResultOfMessageObject)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<ResultOfMessageObject>> GetMessageAsyncWithHttpInfo (long? messageId, string xChannelToken = null)
-        {
-            // verify the required parameter 'messageId' is set
-            if (messageId == null)
-                throw new ApiException(400, "Missing required parameter 'messageId' when calling DaDaPushMessageApi->GetMessage");
-
-            var localVarPath = "/api/v1/message/{messageId}";
-            var localVarPathParams = new Dictionary<String, String>();
-            var localVarQueryParams = new List<KeyValuePair<String, String>>();
-            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
-            var localVarFormParams = new Dictionary<String, String>();
-            var localVarFileParams = new Dictionary<String, FileParameter>();
-            Object localVarPostBody = null;
-
-            // to determine the Content-Type header
-            String[] localVarHttpContentTypes = new String[] {
-            };
-            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-
-            // to determine the Accept header
-            String[] localVarHttpHeaderAccepts = new String[] {
-                "application/json"
-            };
-            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-            if (localVarHttpHeaderAccept != null)
-                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-
-            if (messageId != null) localVarPathParams.Add("messageId", this.Configuration.ApiClient.ParameterToString(messageId)); // path parameter
-            if (xChannelToken != null) localVarHeaderParams.Add("x-channel-token", this.Configuration.ApiClient.ParameterToString(xChannelToken)); // header parameter
-
-
-            // make the HTTP request
-            IRestResponse localVarResponse = (IRestResponse) await this.Configuration.ApiClient.CallApiAsync(localVarPath,
-                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-                localVarPathParams, localVarHttpContentType);
-
-            int localVarStatusCode = (int) localVarResponse.StatusCode;
-
-            if (ExceptionFactory != null)
-            {
-                Exception exception = ExceptionFactory("GetMessage", localVarResponse);
-                if (exception != null) throw exception;
-            }
-
-            return new ApiResponse<ResultOfMessageObject>(localVarStatusCode,
-                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
-                (ResultOfMessageObject) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ResultOfMessageObject)));
-        }
-
-        /// <summary>
-        /// get Message List &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="page">greater than 1</param>
-        /// <param name="pageSize">range is 1,50</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>ResultOfPageResponseOfMessageObject</returns>
-        public ResultOfPageResponseOfMessageObject GetMessages (int? page, int? pageSize, string xChannelToken = null)
-        {
-             ApiResponse<ResultOfPageResponseOfMessageObject> localVarResponse = GetMessagesWithHttpInfo(page, pageSize, xChannelToken);
-             return localVarResponse.Data;
-        }
-
-        /// <summary>
-        /// get Message List &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="page">greater than 1</param>
-        /// <param name="pageSize">range is 1,50</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>ApiResponse of ResultOfPageResponseOfMessageObject</returns>
-        public ApiResponse< ResultOfPageResponseOfMessageObject > GetMessagesWithHttpInfo (int? page, int? pageSize, string xChannelToken = null)
-        {
-            // verify the required parameter 'page' is set
-            if (page == null)
-                throw new ApiException(400, "Missing required parameter 'page' when calling DaDaPushMessageApi->GetMessages");
-            // verify the required parameter 'pageSize' is set
-            if (pageSize == null)
-                throw new ApiException(400, "Missing required parameter 'pageSize' when calling DaDaPushMessageApi->GetMessages");
-
-            var localVarPath = "/api/v1/messages";
-            var localVarPathParams = new Dictionary<String, String>();
-            var localVarQueryParams = new List<KeyValuePair<String, String>>();
-            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
-            var localVarFormParams = new Dictionary<String, String>();
-            var localVarFileParams = new Dictionary<String, FileParameter>();
-            Object localVarPostBody = null;
-
-            // to determine the Content-Type header
-            String[] localVarHttpContentTypes = new String[] {
-            };
-            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-
-            // to determine the Accept header
-            String[] localVarHttpHeaderAccepts = new String[] {
-                "application/json"
-            };
-            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-            if (localVarHttpHeaderAccept != null)
-                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-
-            if (page != null) localVarQueryParams.AddRange(this.Configuration.ApiClient.ParameterToKeyValuePairs("", "page", page)); // query parameter
-            if (pageSize != null) localVarQueryParams.AddRange(this.Configuration.ApiClient.ParameterToKeyValuePairs("", "pageSize", pageSize)); // query parameter
-            if (xChannelToken != null) localVarHeaderParams.Add("x-channel-token", this.Configuration.ApiClient.ParameterToString(xChannelToken)); // header parameter
-
-
-            // make the HTTP request
-            IRestResponse localVarResponse = (IRestResponse) this.Configuration.ApiClient.CallApi(localVarPath,
-                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-                localVarPathParams, localVarHttpContentType);
-
-            int localVarStatusCode = (int) localVarResponse.StatusCode;
-
-            if (ExceptionFactory != null)
-            {
-                Exception exception = ExceptionFactory("GetMessages", localVarResponse);
-                if (exception != null) throw exception;
-            }
-
-            return new ApiResponse<ResultOfPageResponseOfMessageObject>(localVarStatusCode,
-                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
-                (ResultOfPageResponseOfMessageObject) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ResultOfPageResponseOfMessageObject)));
-        }
-
-        /// <summary>
-        /// get Message List &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="page">greater than 1</param>
-        /// <param name="pageSize">range is 1,50</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>Task of ResultOfPageResponseOfMessageObject</returns>
-        public async System.Threading.Tasks.Task<ResultOfPageResponseOfMessageObject> GetMessagesAsync (int? page, int? pageSize, string xChannelToken = null)
-        {
-             ApiResponse<ResultOfPageResponseOfMessageObject> localVarResponse = await GetMessagesAsyncWithHttpInfo(page, pageSize, xChannelToken);
-             return localVarResponse.Data;
-
-        }
-
-        /// <summary>
-        /// get Message List &lt;h2&gt;Rate Limit:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;1 request per 1s&lt;/li&gt;&lt;li&gt;45 request per 1m&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Result code/errmsg List:&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;0: ok&lt;/li&gt;&lt;li&gt;1: server error&lt;/li&gt;&lt;li&gt;101: channel is exists&lt;/li&gt;&lt;li&gt;102: channel is not exists&lt;/li&gt;&lt;li&gt;103: channel token error&lt;/li&gt;&lt;li&gt;104: channel is not exists&lt;/li&gt;&lt;li&gt;105: message is not exists&lt;/li&gt;&lt;li&gt;204: bad request&lt;/li&gt;&lt;li&gt;205: permission deny&lt;/li&gt;&lt;li&gt;206: too many request, please after 5 minutes to try!&lt;/li&gt;&lt;li&gt;301: duplicate username/email&lt;/li&gt;&lt;li&gt;302: user is not exists&lt;/li&gt;&lt;li&gt;303: user password is error&lt;/li&gt;&lt;li&gt;304: client push token is error&lt;/li&gt;&lt;li&gt;305: user is disabled&lt;/li&gt;&lt;li&gt;306: your subscription is expired&lt;/li&gt;&lt;li&gt;307: user not subscribe channel&lt;/li&gt;&lt;/ul&gt;
-        /// </summary>
-        /// <exception cref="Com.DaDaPush.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="page">greater than 1</param>
-        /// <param name="pageSize">range is 1,50</param>
-        /// <param name="xChannelToken">see: https://www.dadapush.com/channel/list (optional)</param>
-        /// <returns>Task of ApiResponse (ResultOfPageResponseOfMessageObject)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<ResultOfPageResponseOfMessageObject>> GetMessagesAsyncWithHttpInfo (int? page, int? pageSize, string xChannelToken = null)
-        {
-            // verify the required parameter 'page' is set
-            if (page == null)
-                throw new ApiException(400, "Missing required parameter 'page' when calling DaDaPushMessageApi->GetMessages");
-            // verify the required parameter 'pageSize' is set
-            if (pageSize == null)
-                throw new ApiException(400, "Missing required parameter 'pageSize' when calling DaDaPushMessageApi->GetMessages");
-
-            var localVarPath = "/api/v1/messages";
-            var localVarPathParams = new Dictionary<String, String>();
-            var localVarQueryParams = new List<KeyValuePair<String, String>>();
-            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
-            var localVarFormParams = new Dictionary<String, String>();
-            var localVarFileParams = new Dictionary<String, FileParameter>();
-            Object localVarPostBody = null;
-
-            // to determine the Content-Type header
-            String[] localVarHttpContentTypes = new String[] {
-            };
-            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-
-            // to determine the Accept header
-            String[] localVarHttpHeaderAccepts = new String[] {
-                "application/json"
-            };
-            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-            if (localVarHttpHeaderAccept != null)
-                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-
-            if (page != null) localVarQueryParams.AddRange(this.Configuration.ApiClient.ParameterToKeyValuePairs("", "page", page)); // query parameter
-            if (pageSize != null) localVarQueryParams.AddRange(this.Configuration.ApiClient.ParameterToKeyValuePairs("", "pageSize", pageSize)); // query parameter
-            if (xChannelToken != null) localVarHeaderParams.Add("x-channel-token", this.Configuration.ApiClient.ParameterToString(xChannelToken)); // header parameter
-
-
-            // make the HTTP request
-            IRestResponse localVarResponse = (IRestResponse) await this.Configuration.ApiClient.CallApiAsync(localVarPath,
-                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-                localVarPathParams, localVarHttpContentType);
-
-            int localVarStatusCode = (int) localVarResponse.StatusCode;
-
-            if (ExceptionFactory != null)
-            {
-                Exception exception = ExceptionFactory("GetMessages", localVarResponse);
-                if (exception != null) throw exception;
-            }
-
-            return new ApiResponse<ResultOfPageResponseOfMessageObject>(localVarStatusCode,
-                localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
-                (ResultOfPageResponseOfMessageObject) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ResultOfPageResponseOfMessageObject)));
-        }
-
     }
 }

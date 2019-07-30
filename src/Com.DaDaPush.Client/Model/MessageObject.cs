@@ -9,34 +9,32 @@
  */
 
 using System;
-using System.Linq;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = Com.DaDaPush.Client.Client.OpenAPIDateConverter;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Com.DaDaPush.Client.Model
 {
     /// <summary>
-    /// MessageObject
+    ///     MessageObject
     /// </summary>
     [DataContract]
-    public partial class MessageObject :  IEquatable<MessageObject>, IValidatableObject
+    public class MessageObject : IEquatable<MessageObject>, IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageObject" /> class.
+        ///     Initializes a new instance of the <see cref="MessageObject" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected MessageObject() { }
+        protected MessageObject()
+        {
+        }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageObject" /> class.
+        ///     Initializes a new instance of the <see cref="MessageObject" /> class.
         /// </summary>
         /// <param name="actions">action size range is 0,3.</param>
         /// <param name="channelName">channelName (required).</param>
@@ -44,100 +42,128 @@ namespace Com.DaDaPush.Client.Model
         /// <param name="createdAt">createdAt (required).</param>
         /// <param name="id">id (required).</param>
         /// <param name="title">title (required).</param>
-        public MessageObject(List<Action> actions = default(List<Action>), string channelName = default(string), string content = default(string), string createdAt = default(string), long? id = default(long?), string title = default(string))
+        public MessageObject(List<Action> actions = default(List<Action>), string channelName = default(string),
+            string content = default(string), string createdAt = default(string), long? id = default(long?),
+            string title = default(string))
         {
             // to ensure "channelName" is required (not null)
-            if (channelName == null)
-            {
-                throw new InvalidDataException("channelName is a required property for MessageObject and cannot be null");
-            }
-            else
-            {
-                this.ChannelName = channelName;
-            }
-            
+            ChannelName = channelName ?? throw new InvalidDataException(
+                              "channelName is a required property for MessageObject and cannot be null");
+
             // to ensure "content" is required (not null)
-            if (content == null)
-            {
-                throw new InvalidDataException("content is a required property for MessageObject and cannot be null");
-            }
-            else
-            {
-                this.Content = content;
-            }
-            
+            Content = content ?? throw new InvalidDataException(
+                          "content is a required property for MessageObject and cannot be null");
+
             // to ensure "createdAt" is required (not null)
-            if (createdAt == null)
-            {
-                throw new InvalidDataException("createdAt is a required property for MessageObject and cannot be null");
-            }
-            else
-            {
-                this.CreatedAt = createdAt;
-            }
-            
+            CreatedAt = createdAt ??
+                        throw new InvalidDataException(
+                            "createdAt is a required property for MessageObject and cannot be null");
+
             // to ensure "id" is required (not null)
             if (id == null)
-            {
                 throw new InvalidDataException("id is a required property for MessageObject and cannot be null");
-            }
-            else
-            {
-                this.Id = id;
-            }
-            
+            Id = id;
+
             // to ensure "title" is required (not null)
-            if (title == null)
-            {
-                throw new InvalidDataException("title is a required property for MessageObject and cannot be null");
-            }
-            else
-            {
-                this.Title = title;
-            }
-            
-            this.Actions = actions;
+            Title = title ?? throw new InvalidDataException(
+                        "title is a required property for MessageObject and cannot be null");
+
+            Actions = actions;
         }
-        
+
         /// <summary>
-        /// action size range is 0,3
+        ///     action size range is 0,3
         /// </summary>
         /// <value>action size range is 0,3</value>
-        [DataMember(Name="actions", EmitDefaultValue=false)]
+        [DataMember(Name = "actions", EmitDefaultValue = false)]
         public List<Action> Actions { get; set; }
 
         /// <summary>
-        /// Gets or Sets ChannelName
+        ///     Gets or Sets ChannelName
         /// </summary>
-        [DataMember(Name="channelName", EmitDefaultValue=false)]
+        [DataMember(Name = "channelName", EmitDefaultValue = false)]
         public string ChannelName { get; set; }
 
         /// <summary>
-        /// Gets or Sets Content
+        ///     Gets or Sets Content
         /// </summary>
-        [DataMember(Name="content", EmitDefaultValue=false)]
+        [DataMember(Name = "content", EmitDefaultValue = false)]
         public string Content { get; set; }
 
         /// <summary>
-        /// Gets or Sets CreatedAt
+        ///     Gets or Sets CreatedAt
         /// </summary>
-        [DataMember(Name="createdAt", EmitDefaultValue=false)]
+        [DataMember(Name = "createdAt", EmitDefaultValue = false)]
         public string CreatedAt { get; set; }
 
         /// <summary>
-        /// Gets or Sets Id
+        ///     Gets or Sets Id
         /// </summary>
-        [DataMember(Name="id", EmitDefaultValue=false)]
+        [DataMember(Name = "id", EmitDefaultValue = false)]
         public long? Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets Title
+        ///     Gets or Sets Title
         /// </summary>
-        [DataMember(Name="title", EmitDefaultValue=false)]
+        [DataMember(Name = "title", EmitDefaultValue = false)]
         public string Title { get; set; }
 
         /// <summary>
-        /// Returns the string presentation of the object
+        ///     Returns true if MessageObject instances are equal
+        /// </summary>
+        /// <param name="input">Instance of MessageObject to be compared</param>
+        /// <returns>Boolean</returns>
+        public bool Equals(MessageObject input)
+        {
+            if (input == null)
+                return false;
+
+            return
+                (
+                    Actions == input.Actions ||
+                    Actions != null &&
+                    input.Actions != null &&
+                    Actions.SequenceEqual(input.Actions)
+                ) &&
+                (
+                    ChannelName == input.ChannelName ||
+                    ChannelName != null &&
+                    ChannelName.Equals(input.ChannelName)
+                ) &&
+                (
+                    Content == input.Content ||
+                    Content != null &&
+                    Content.Equals(input.Content)
+                ) &&
+                (
+                    CreatedAt == input.CreatedAt ||
+                    CreatedAt != null &&
+                    CreatedAt.Equals(input.CreatedAt)
+                ) &&
+                (
+                    Id == input.Id ||
+                    Id != null &&
+                    Id.Equals(input.Id)
+                ) &&
+                (
+                    Title == input.Title ||
+                    Title != null &&
+                    Title.Equals(input.Title)
+                );
+        }
+
+        /// <summary>
+        ///     To validate all properties of the instance
+        /// </summary>
+        /// <param name="validationContext">Validation context</param>
+        /// <returns>Validation Result</returns>
+        IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
+        {
+            yield break;
+        }
+
+        /// <summary>
+        ///     Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
         public override string ToString()
@@ -153,9 +179,9 @@ namespace Com.DaDaPush.Client.Model
             sb.Append("}\n");
             return sb.ToString();
         }
-  
+
         /// <summary>
-        /// Returns the JSON string presentation of the object
+        ///     Returns the JSON string presentation of the object
         /// </summary>
         /// <returns>JSON string presentation of the object</returns>
         public virtual string ToJson()
@@ -164,93 +190,38 @@ namespace Com.DaDaPush.Client.Model
         }
 
         /// <summary>
-        /// Returns true if objects are equal
+        ///     Returns true if objects are equal
         /// </summary>
         /// <param name="input">Object to be compared</param>
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as MessageObject);
+            return Equals(input as MessageObject);
         }
 
         /// <summary>
-        /// Returns true if MessageObject instances are equal
-        /// </summary>
-        /// <param name="input">Instance of MessageObject to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(MessageObject input)
-        {
-            if (input == null)
-                return false;
-
-            return 
-                (
-                    this.Actions == input.Actions ||
-                    this.Actions != null &&
-                    input.Actions != null &&
-                    this.Actions.SequenceEqual(input.Actions)
-                ) && 
-                (
-                    this.ChannelName == input.ChannelName ||
-                    (this.ChannelName != null &&
-                    this.ChannelName.Equals(input.ChannelName))
-                ) && 
-                (
-                    this.Content == input.Content ||
-                    (this.Content != null &&
-                    this.Content.Equals(input.Content))
-                ) && 
-                (
-                    this.CreatedAt == input.CreatedAt ||
-                    (this.CreatedAt != null &&
-                    this.CreatedAt.Equals(input.CreatedAt))
-                ) && 
-                (
-                    this.Id == input.Id ||
-                    (this.Id != null &&
-                    this.Id.Equals(input.Id))
-                ) && 
-                (
-                    this.Title == input.Title ||
-                    (this.Title != null &&
-                    this.Title.Equals(input.Title))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
+        ///     Gets the hash code
         /// </summary>
         /// <returns>Hash code</returns>
         public override int GetHashCode()
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
-                if (this.Actions != null)
-                    hashCode = hashCode * 59 + this.Actions.GetHashCode();
-                if (this.ChannelName != null)
-                    hashCode = hashCode * 59 + this.ChannelName.GetHashCode();
-                if (this.Content != null)
-                    hashCode = hashCode * 59 + this.Content.GetHashCode();
-                if (this.CreatedAt != null)
-                    hashCode = hashCode * 59 + this.CreatedAt.GetHashCode();
-                if (this.Id != null)
-                    hashCode = hashCode * 59 + this.Id.GetHashCode();
-                if (this.Title != null)
-                    hashCode = hashCode * 59 + this.Title.GetHashCode();
+                var hashCode = 41;
+                if (Actions != null)
+                    hashCode = hashCode * 59 + Actions.GetHashCode();
+                if (ChannelName != null)
+                    hashCode = hashCode * 59 + ChannelName.GetHashCode();
+                if (Content != null)
+                    hashCode = hashCode * 59 + Content.GetHashCode();
+                if (CreatedAt != null)
+                    hashCode = hashCode * 59 + CreatedAt.GetHashCode();
+                if (Id != null)
+                    hashCode = hashCode * 59 + Id.GetHashCode();
+                if (Title != null)
+                    hashCode = hashCode * 59 + Title.GetHashCode();
                 return hashCode;
             }
         }
-
-        /// <summary>
-        /// To validate all properties of the instance
-        /// </summary>
-        /// <param name="validationContext">Validation context</param>
-        /// <returns>Validation Result</returns>
-        IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
-        {
-            yield break;
-        }
     }
-
 }

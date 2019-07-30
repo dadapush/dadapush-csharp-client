@@ -126,7 +126,3 @@ Class | Method | HTTP request | Description
  - [Model.ResultOfMessagePushResponse](docs/ResultOfMessagePushResponse.md)
  - [Model.ResultOfPageResponseOfMessageObject](docs/ResultOfPageResponseOfMessageObject.md)
 
-
-## Documentation for Authorization
-
-All endpoints do not require authorization.

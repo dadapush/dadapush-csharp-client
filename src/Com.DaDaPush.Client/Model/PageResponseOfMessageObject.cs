@@ -9,60 +9,94 @@
  */
 
 using System;
-using System.Linq;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = Com.DaDaPush.Client.Client.OpenAPIDateConverter;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Com.DaDaPush.Client.Model
 {
     /// <summary>
-    /// PageResponseOfMessageObject
+    ///     PageResponseOfMessageObject
     /// </summary>
     [DataContract]
-    public partial class PageResponseOfMessageObject :  IEquatable<PageResponseOfMessageObject>, IValidatableObject
+    public class PageResponseOfMessageObject : IEquatable<PageResponseOfMessageObject>, IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PageResponseOfMessageObject" /> class.
+        ///     Initializes a new instance of the <see cref="PageResponseOfMessageObject" /> class.
         /// </summary>
         /// <param name="content">content.</param>
         /// <param name="totalElements">totalElements.</param>
         /// <param name="totalPages">totalPages.</param>
-        public PageResponseOfMessageObject(List<MessageObject> content = default(List<MessageObject>), long? totalElements = default(long?), long? totalPages = default(long?))
+        public PageResponseOfMessageObject(List<MessageObject> content = default(List<MessageObject>),
+            long? totalElements = default(long?), long? totalPages = default(long?))
         {
-            this.Content = content;
-            this.TotalElements = totalElements;
-            this.TotalPages = totalPages;
+            Content = content;
+            TotalElements = totalElements;
+            TotalPages = totalPages;
         }
-        
+
         /// <summary>
-        /// Gets or Sets Content
+        ///     Gets or Sets Content
         /// </summary>
-        [DataMember(Name="content", EmitDefaultValue=false)]
+        [DataMember(Name = "content", EmitDefaultValue = false)]
         public List<MessageObject> Content { get; set; }
 
         /// <summary>
-        /// Gets or Sets TotalElements
+        ///     Gets or Sets TotalElements
         /// </summary>
-        [DataMember(Name="totalElements", EmitDefaultValue=false)]
+        [DataMember(Name = "totalElements", EmitDefaultValue = false)]
         public long? TotalElements { get; set; }
 
         /// <summary>
-        /// Gets or Sets TotalPages
+        ///     Gets or Sets TotalPages
         /// </summary>
-        [DataMember(Name="totalPages", EmitDefaultValue=false)]
+        [DataMember(Name = "totalPages", EmitDefaultValue = false)]
         public long? TotalPages { get; set; }
 
         /// <summary>
-        /// Returns the string presentation of the object
+        ///     Returns true if PageResponseOfMessageObject instances are equal
+        /// </summary>
+        /// <param name="input">Instance of PageResponseOfMessageObject to be compared</param>
+        /// <returns>Boolean</returns>
+        public bool Equals(PageResponseOfMessageObject input)
+        {
+            if (input == null)
+                return false;
+
+            return
+                (
+                    Content == input.Content ||
+                    Content != null &&
+                    input.Content != null &&
+                    Content.SequenceEqual(input.Content)
+                ) &&
+                (
+                    TotalElements == input.TotalElements ||
+                    TotalElements != null &&
+                    TotalElements.Equals(input.TotalElements)
+                ) &&
+                (
+                    TotalPages == input.TotalPages ||
+                    TotalPages != null &&
+                    TotalPages.Equals(input.TotalPages)
+                );
+        }
+
+        /// <summary>
+        ///     To validate all properties of the instance
+        /// </summary>
+        /// <param name="validationContext">Validation context</param>
+        /// <returns>Validation Result</returns>
+        IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
+        {
+            yield break;
+        }
+
+        /// <summary>
+        ///     Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
         public override string ToString()
@@ -75,9 +109,9 @@ namespace Com.DaDaPush.Client.Model
             sb.Append("}\n");
             return sb.ToString();
         }
-  
+
         /// <summary>
-        /// Returns the JSON string presentation of the object
+        ///     Returns the JSON string presentation of the object
         /// </summary>
         /// <returns>JSON string presentation of the object</returns>
         public virtual string ToJson()
@@ -86,72 +120,32 @@ namespace Com.DaDaPush.Client.Model
         }
 
         /// <summary>
-        /// Returns true if objects are equal
+        ///     Returns true if objects are equal
         /// </summary>
         /// <param name="input">Object to be compared</param>
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as PageResponseOfMessageObject);
+            return Equals(input as PageResponseOfMessageObject);
         }
 
         /// <summary>
-        /// Returns true if PageResponseOfMessageObject instances are equal
-        /// </summary>
-        /// <param name="input">Instance of PageResponseOfMessageObject to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(PageResponseOfMessageObject input)
-        {
-            if (input == null)
-                return false;
-
-            return 
-                (
-                    this.Content == input.Content ||
-                    this.Content != null &&
-                    input.Content != null &&
-                    this.Content.SequenceEqual(input.Content)
-                ) && 
-                (
-                    this.TotalElements == input.TotalElements ||
-                    (this.TotalElements != null &&
-                    this.TotalElements.Equals(input.TotalElements))
-                ) && 
-                (
-                    this.TotalPages == input.TotalPages ||
-                    (this.TotalPages != null &&
-                    this.TotalPages.Equals(input.TotalPages))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
+        ///     Gets the hash code
         /// </summary>
         /// <returns>Hash code</returns>
         public override int GetHashCode()
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
-                if (this.Content != null)
-                    hashCode = hashCode * 59 + this.Content.GetHashCode();
-                if (this.TotalElements != null)
-                    hashCode = hashCode * 59 + this.TotalElements.GetHashCode();
-                if (this.TotalPages != null)
-                    hashCode = hashCode * 59 + this.TotalPages.GetHashCode();
+                var hashCode = 41;
+                if (Content != null)
+                    hashCode = hashCode * 59 + Content.GetHashCode();
+                if (TotalElements != null)
+                    hashCode = hashCode * 59 + TotalElements.GetHashCode();
+                if (TotalPages != null)
+                    hashCode = hashCode * 59 + TotalPages.GetHashCode();
                 return hashCode;
             }
         }
-
-        /// <summary>
-        /// To validate all properties of the instance
-        /// </summary>
-        /// <param name="validationContext">Validation context</param>
-        /// <returns>Validation Result</returns>
-        IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
-        {
-            yield break;
-        }
     }
-
 }

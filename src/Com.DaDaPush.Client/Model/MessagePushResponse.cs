@@ -9,58 +9,76 @@
  */
 
 using System;
-using System.Linq;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = Com.DaDaPush.Client.Client.OpenAPIDateConverter;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Com.DaDaPush.Client.Model
 {
     /// <summary>
-    /// MessagePushResponse
+    ///     MessagePushResponse
     /// </summary>
     [DataContract]
-    public partial class MessagePushResponse :  IEquatable<MessagePushResponse>, IValidatableObject
+    public class MessagePushResponse : IEquatable<MessagePushResponse>, IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessagePushResponse" /> class.
+        ///     Initializes a new instance of the <see cref="MessagePushResponse" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected MessagePushResponse() { }
+        protected MessagePushResponse()
+        {
+        }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessagePushResponse" /> class.
+        ///     Initializes a new instance of the <see cref="MessagePushResponse" /> class.
         /// </summary>
         /// <param name="messageId">messageId (required).</param>
         public MessagePushResponse(long? messageId = default(long?))
         {
             // to ensure "messageId" is required (not null)
             if (messageId == null)
-            {
-                throw new InvalidDataException("messageId is a required property for MessagePushResponse and cannot be null");
-            }
-            else
-            {
-                this.MessageId = messageId;
-            }
-            
+                throw new InvalidDataException(
+                    "messageId is a required property for MessagePushResponse and cannot be null");
+            MessageId = messageId;
         }
-        
+
         /// <summary>
-        /// Gets or Sets MessageId
+        ///     Gets or Sets MessageId
         /// </summary>
-        [DataMember(Name="messageId", EmitDefaultValue=false)]
+        [DataMember(Name = "messageId", EmitDefaultValue = false)]
         public long? MessageId { get; set; }
 
         /// <summary>
-        /// Returns the string presentation of the object
+        ///     Returns true if MessagePushResponse instances are equal
+        /// </summary>
+        /// <param name="input">Instance of MessagePushResponse to be compared</param>
+        /// <returns>Boolean</returns>
+        public bool Equals(MessagePushResponse input)
+        {
+            if (input == null)
+                return false;
+
+            return
+                MessageId == input.MessageId ||
+                MessageId != null &&
+                MessageId.Equals(input.MessageId);
+        }
+
+        /// <summary>
+        ///     To validate all properties of the instance
+        /// </summary>
+        /// <param name="validationContext">Validation context</param>
+        /// <returns>Validation Result</returns>
+        IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
+        {
+            yield break;
+        }
+
+        /// <summary>
+        ///     Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
         public override string ToString()
@@ -71,9 +89,9 @@ namespace Com.DaDaPush.Client.Model
             sb.Append("}\n");
             return sb.ToString();
         }
-  
+
         /// <summary>
-        /// Returns the JSON string presentation of the object
+        ///     Returns the JSON string presentation of the object
         /// </summary>
         /// <returns>JSON string presentation of the object</returns>
         public virtual string ToJson()
@@ -82,57 +100,28 @@ namespace Com.DaDaPush.Client.Model
         }
 
         /// <summary>
-        /// Returns true if objects are equal
+        ///     Returns true if objects are equal
         /// </summary>
         /// <param name="input">Object to be compared</param>
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as MessagePushResponse);
+            return Equals(input as MessagePushResponse);
         }
 
         /// <summary>
-        /// Returns true if MessagePushResponse instances are equal
-        /// </summary>
-        /// <param name="input">Instance of MessagePushResponse to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(MessagePushResponse input)
-        {
-            if (input == null)
-                return false;
-
-            return 
-                (
-                    this.MessageId == input.MessageId ||
-                    (this.MessageId != null &&
-                    this.MessageId.Equals(input.MessageId))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
+        ///     Gets the hash code
         /// </summary>
         /// <returns>Hash code</returns>
         public override int GetHashCode()
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
-                if (this.MessageId != null)
-                    hashCode = hashCode * 59 + this.MessageId.GetHashCode();
+                var hashCode = 41;
+                if (MessageId != null)
+                    hashCode = hashCode * 59 + MessageId.GetHashCode();
                 return hashCode;
             }
         }
-
-        /// <summary>
-        /// To validate all properties of the instance
-        /// </summary>
-        /// <param name="validationContext">Validation context</param>
-        /// <returns>Validation Result</returns>
-        IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
-        {
-            yield break;
-        }
     }
-
 }

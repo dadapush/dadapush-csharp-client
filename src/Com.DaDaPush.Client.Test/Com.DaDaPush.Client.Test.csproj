@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
 DaDaPush Public API
 
@@ -72,11 +72,10 @@ Contact: contacts@dadapush.com
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="**\*.cs"
-             Exclude="obj\**"/>
+      <Compile Include="**\*.cs" Exclude="obj\**"/>
   </ItemGroup>
   <ItemGroup>
-      <None Include="packages.config" />
+      <None Include="packages.config"/>
   </ItemGroup>
   <Import Project="$(MsBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -86,4 +85,3 @@ Contact: contacts@dadapush.com
       </ProjectReference>
   </ItemGroup>
 </Project>
-

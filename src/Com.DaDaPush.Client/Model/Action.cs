@@ -9,55 +9,46 @@
  */
 
 using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = Com.DaDaPush.Client.Client.OpenAPIDateConverter;
 
 namespace Com.DaDaPush.Client.Model
 {
     /// <summary>
-    /// Action
+    ///     Action
     /// </summary>
     [DataContract]
-    public partial class Action :  IEquatable<Action>, IValidatableObject
+    public class Action : IEquatable<Action>, IValidatableObject
     {
         /// <summary>
-        /// fix value: link
+        ///     fix value: link
         /// </summary>
         /// <value>fix value: link</value>
         [JsonConverter(typeof(StringEnumConverter))]
         public enum TypeEnum
         {
             /// <summary>
-            /// Enum Link for value: link
+            ///     Enum Link for value: link
             /// </summary>
-            [EnumMember(Value = "link")]
-            Link = 1
-
+            [EnumMember(Value = "link")] Link = 1
         }
 
         /// <summary>
-        /// fix value: link
-        /// </summary>
-        /// <value>fix value: link</value>
-        [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Action" /> class.
+        ///     Initializes a new instance of the <see cref="Action" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected Action() { }
+        protected Action()
+        {
+        }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Action" /> class.
+        ///     Initializes a new instance of the <see cref="Action" /> class.
         /// </summary>
         /// <param name="name">action button name (required).</param>
         /// <param name="type">fix value: link (required).</param>
@@ -65,54 +56,101 @@ namespace Com.DaDaPush.Client.Model
         public Action(string name = default(string), TypeEnum type = default(TypeEnum), string url = default(string))
         {
             // to ensure "name" is required (not null)
-            if (name == null)
-            {
-                throw new InvalidDataException("name is a required property for Action and cannot be null");
-            }
-            else
-            {
-                this.Name = name;
-            }
-            
+            Name = name ?? throw new InvalidDataException("name is a required property for Action and cannot be null");
+
             // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for Action and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
-            }
-            
+            Type = type;
+
             // to ensure "url" is required (not null)
-            if (url == null)
-            {
-                throw new InvalidDataException("url is a required property for Action and cannot be null");
-            }
-            else
-            {
-                this.Url = url;
-            }
-            
+            Url = url ?? throw new InvalidDataException("url is a required property for Action and cannot be null");
         }
-        
+
         /// <summary>
-        /// action button name
+        ///     fix value: link
+        /// </summary>
+        /// <value>fix value: link</value>
+        [DataMember(Name = "type", EmitDefaultValue = false)]
+        public TypeEnum Type { get; set; }
+
+        /// <summary>
+        ///     action button name
         /// </summary>
         /// <value>action button name</value>
-        [DataMember(Name="name", EmitDefaultValue=false)]
+        [DataMember(Name = "name", EmitDefaultValue = false)]
         public string Name { get; set; }
 
 
         /// <summary>
-        /// action url
+        ///     action url
         /// </summary>
         /// <value>action url</value>
-        [DataMember(Name="url", EmitDefaultValue=false)]
+        [DataMember(Name = "url", EmitDefaultValue = false)]
         public string Url { get; set; }
 
         /// <summary>
-        /// Returns the string presentation of the object
+        ///     Returns true if Action instances are equal
+        /// </summary>
+        /// <param name="input">Instance of Action to be compared</param>
+        /// <returns>Boolean</returns>
+        public bool Equals(Action input)
+        {
+            if (input == null)
+                return false;
+
+            return
+                (
+                    Name == input.Name ||
+                    Name != null &&
+                    Name.Equals(input.Name)
+                ) &&
+                (
+                    Type == input.Type ||
+                    Type.Equals(input.Type)
+                ) &&
+                (
+                    Url == input.Url ||
+                    Url != null &&
+                    Url.Equals(input.Url)
+                );
+        }
+
+        /// <summary>
+        ///     To validate all properties of the instance
+        /// </summary>
+        /// <param name="validationContext">Validation context</param>
+        /// <returns>Validation Result</returns>
+        IEnumerable<ValidationResult> IValidatableObject.Validate(
+            ValidationContext validationContext)
+        {
+            // Name (string) maxLength
+            if (Name != null && Name.Length > 20)
+                yield return new ValidationResult(
+                    "Invalid value for Name, length must be less than 20.", new[] {"Name"});
+
+            // Name (string) minLength
+            if (Name != null && Name.Length < 1)
+                yield return new ValidationResult(
+                    "Invalid value for Name, length must be greater than 1.", new[] {"Name"});
+
+            // Type (string) pattern
+            var regexType = new Regex(@"link", RegexOptions.CultureInvariant);
+            if (Type != TypeEnum.Link)
+                yield return new ValidationResult(
+                    "Invalid value for Type, must match a pattern of " + regexType, new[] {"Type"});
+
+            // Url (string) maxLength
+            if (Url != null && Url.Length > 500)
+                yield return new ValidationResult(
+                    "Invalid value for Url, length must be less than 500.", new[] {"Url"});
+
+            // Url (string) minLength
+            if (Url != null && Url.Length < 1)
+                yield return new ValidationResult(
+                    "Invalid value for Url, length must be greater than 1.", new[] {"Url"});
+        }
+
+        /// <summary>
+        ///     Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
         public override string ToString()
@@ -125,9 +163,9 @@ namespace Com.DaDaPush.Client.Model
             sb.Append("}\n");
             return sb.ToString();
         }
-  
+
         /// <summary>
-        /// Returns the JSON string presentation of the object
+        ///     Returns the JSON string presentation of the object
         /// </summary>
         /// <returns>JSON string presentation of the object</returns>
         public virtual string ToJson()
@@ -136,102 +174,32 @@ namespace Com.DaDaPush.Client.Model
         }
 
         /// <summary>
-        /// Returns true if objects are equal
+        ///     Returns true if objects are equal
         /// </summary>
         /// <param name="input">Object to be compared</param>
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as Action);
+            return Equals(input as Action);
         }
 
         /// <summary>
-        /// Returns true if Action instances are equal
-        /// </summary>
-        /// <param name="input">Instance of Action to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(Action input)
-        {
-            if (input == null)
-                return false;
-
-            return 
-                (
-                    this.Name == input.Name ||
-                    (this.Name != null &&
-                    this.Name.Equals(input.Name))
-                ) && 
-                (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
-                ) && 
-                (
-                    this.Url == input.Url ||
-                    (this.Url != null &&
-                    this.Url.Equals(input.Url))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
+        ///     Gets the hash code
         /// </summary>
         /// <returns>Hash code</returns>
         public override int GetHashCode()
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
-                if (this.Name != null)
-                    hashCode = hashCode * 59 + this.Name.GetHashCode();
-                if (this.Type != null)
-                    hashCode = hashCode * 59 + this.Type.GetHashCode();
-                if (this.Url != null)
-                    hashCode = hashCode * 59 + this.Url.GetHashCode();
+                var hashCode = 41;
+                if (Name != null)
+                    hashCode = hashCode * 59 + Name.GetHashCode();
+                if (Type != null)
+                    hashCode = hashCode * 59 + Type.GetHashCode();
+                if (Url != null)
+                    hashCode = hashCode * 59 + Url.GetHashCode();
                 return hashCode;
             }
         }
-
-        /// <summary>
-        /// To validate all properties of the instance
-        /// </summary>
-        /// <param name="validationContext">Validation context</param>
-        /// <returns>Validation Result</returns>
-        IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
-        {
-            // Name (string) maxLength
-            if(this.Name != null && this.Name.Length > 20)
-            {
-                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Name, length must be less than 20.", new [] { "Name" });
-            }
-
-            // Name (string) minLength
-            if(this.Name != null && this.Name.Length < 1)
-            {
-                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Name, length must be greater than 1.", new [] { "Name" });
-            }
-
-            // Type (string) pattern
-            Regex regexType = new Regex(@"link", RegexOptions.CultureInvariant);
-            if (false == regexType.Match(this.Type).Success)
-            {
-                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Type, must match a pattern of " + regexType, new [] { "Type" });
-            }
-
-            // Url (string) maxLength
-            if(this.Url != null && this.Url.Length > 500)
-            {
-                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Url, length must be less than 500.", new [] { "Url" });
-            }
-
-            // Url (string) minLength
-            if(this.Url != null && this.Url.Length < 1)
-            {
-                yield return new System.ComponentModel.DataAnnotations.ValidationResult("Invalid value for Url, length must be greater than 1.", new [] { "Url" });
-            }
-
-            yield break;
-        }
     }
-
 }
